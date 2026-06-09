@@ -22,16 +22,24 @@
 
   imports = [
     ./hardware-configuration.nix
-    ./modules/apps.nix
-    ./modules/gaming.nix
-    # ./modules/work-apps.nix # Isključeno za ovaj računar
+    ../../modules/system/boot.nix
+    ../../modules/system/audio.nix
+    ../../modules/system/network.nix
+    ../../modules/system/locale.nix
+    ../../modules/system/drivers.nix
+    ../../modules/system/kde.nix
+    ../../modules/system/gaming.nix
+    ../../modules/user/apps.nix
   ];
 
   # ─────────────────────────────────────────────
   # Nix podešavanja
   # ─────────────────────────────────────────────
   nix.settings = {
-    experimental-features = [ "nix-command" "flakes" ];
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
     auto-optimise-store = true;
     max-jobs = "auto";
     cores = 0;
@@ -45,9 +53,12 @@
     ];
   };
 
-  nix.registry = { nixpkgs.flake = inputs.nixpkgs; };
+  nix.registry = {
+    nixpkgs.flake = inputs.nixpkgs;
+  };
   nix.nixPath = [ "nixpkgs=flake:nixpkgs" ];
-  ]; # Omogućava flakes bez dodatnih flagova
+
+  # Omogućava flakes bez dodatnih flagova
 
   # ─────────────────────────────────────────────
   # Bootloader
@@ -105,7 +116,7 @@
 
   system.autoUpgrade = {
     enable = true;
-    flake = "~/Documents/nixos-config#NixOS";
+    flake = "~/Documents/nixos-config#laptop";
     flags = [
       "--update-input"
       "nixpkgs"

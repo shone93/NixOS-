@@ -1,6 +1,5 @@
 { pkgs, ... }:
 
-{
   # Verzija Home Manager stanja (mora pratiti sistemsku verziju)
   home.stateVersion = "26.05";
 
@@ -66,6 +65,16 @@
         "disk"
         "battery"
       ];
+    };
+  };
+
+  programs.git = {
+    enable = true;
+    userName = "shone93";
+    userEmail = "nenadcvijanovic93@gmail.com";  # zameni sa tvojim GitHub emailom
+    extraConfig = {
+      init.defaultBranch = "main";
+      push.autoSetupRemote = true;  # automatski postavlja upstream pri prvom push-u
     };
   };
 }
