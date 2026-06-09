@@ -1,5 +1,7 @@
 { pkgs, ... }:
 
+{
+
   # Verzija Home Manager stanja (mora pratiti sistemsku verziju)
   home.stateVersion = "26.05";
 
@@ -14,12 +16,12 @@
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {
-      "text/plain"            = "dev.zed.Zed.desktop";
-      "text/x-nix"            = "dev.zed.Zed.desktop";
-      "x-scheme-handler/http"  = "zen.desktop";
+      "text/plain" = "dev.zed.Zed.desktop";
+      "text/x-nix" = "dev.zed.Zed.desktop";
+      "x-scheme-handler/http" = "zen.desktop";
       "x-scheme-handler/https" = "zen.desktop";
-      "text/html"              = "zen.desktop";
-      "application/xhtml+xml"  = "zen.desktop";
+      "text/html" = "zen.desktop";
+      "application/xhtml+xml" = "zen.desktop";
     };
   };
 
@@ -71,10 +73,10 @@
   programs.git = {
     enable = true;
     userName = "shone93";
-    userEmail = "nenadcvijanovic93@gmail.com";  # zameni sa tvojim GitHub emailom
+    userEmail = "nenadcvijanovic93@gmail.com"; # zameni sa tvojim GitHub emailom
     extraConfig = {
       init.defaultBranch = "main";
-      push.autoSetupRemote = true;  # automatski postavlja upstream pri prvom push-u
+      push.autoSetupRemote = true; # automatski postavlja upstream pri prvom push-u
     };
   };
 }
