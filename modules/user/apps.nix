@@ -41,5 +41,12 @@
 
     # Screenshot (radi na KDE i Niri)
     kdePackages.spectacle
+
+    # Fontovi
+    nerd-fonts.jetbrains-mono # Trenutno koristiš u Ghostty
+    nerd-fonts.caskaydia-cove # Chris Titus favorit - Cascadia Code sa ikonama
+    nerd-fonts.fira-code # Popularan sa ligaturama
+    noto-fonts # Glavni sistemski font
+    noto-fonts-emoji # Emoji podrška
   ];
 }
