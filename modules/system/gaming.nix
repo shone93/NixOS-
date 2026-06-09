@@ -38,11 +38,6 @@
     ];
   };
 
-  # Zaobilaznice za crash steamwebhelper-a na Waylandu s Optimus GPU-om
-  environment.sessionVariables = {
-    STEAM_DISABLE_BROWSER_HARDWARE_ACCELERATION = "1";
-  };
-
   # ─────────────────────────────────────────────
   # Programi za gejming
   # ─────────────────────────────────────────────
