@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   # Verzija Home Manager stanja (mora pratiti sistemsku verziju)
@@ -15,12 +15,12 @@
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {
-      "text/plain" = "dev.zed.Zed.desktop";
-      "text/x-nix" = "dev.zed.Zed.desktop";
-      "x-scheme-handler/http" = "zen.desktop";
+      "text/plain"            = "dev.zed.Zed.desktop";
+      "text/x-nix"            = "dev.zed.Zed.desktop";
+      "x-scheme-handler/http"  = "zen.desktop";
       "x-scheme-handler/https" = "zen.desktop";
-      "text/html" = "zen.desktop";
-      "application/xhtml+xml" = "zen.desktop";
+      "text/html"              = "zen.desktop";
+      "application/xhtml+xml"  = "zen.desktop";
     };
   };
 

@@ -24,7 +24,6 @@
   programs.ghostty = {
     enable = true;
     settings = {
-      theme = "tokyonight_night";
       font-size = 12;
       background-opacity = 0.85;
     };

@@ -54,4 +54,16 @@
     vesktop # Discord klijent optimizovan za Linux
     winetricks
   ];
+
+  # GameMode - boost performansi tokom igranja
+  programs.gamemode.enable = true;
+
+  # Gamescope - Valve-ov micro compositor za igre
+  programs.steam.gamescopeSession.enable = true;
+
+  # Putanja za custom Proton verzije
+  environment.sessionVariables = {
+    STEAM_DISABLE_BROWSER_HARDWARE_ACCELERATION = "1";
+    STEAM_EXTRA_COMPAT_TOOLS_PATHS = "$HOME/.steam/root/compatibilitytools.d";
+  };
 }
