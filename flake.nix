@@ -20,18 +20,18 @@
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs: {
     nixosConfigurations = {
-      NixOS = nixpkgs.lib.nixosSystem {
+      laptop = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        specialArgs = { inherit inputs; }; # Prosleđujemo eksterne alate u sistem
+        specialArgs = { inherit inputs; };
         modules = [
-          ./configuration.nix
+          ./hosts/laptop/configuration.nix
 
-          # Integracija Home Manager-a direktno u NixOS build sistem
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users.whitewolf = import ./home.nix;
+            home-manager.users.whitewolf = import ./home/whitewolf.nix;
+            home-manager.users.lizzywizzy = import ./home/lizzywizzy.nix;
           }
         ];
       };

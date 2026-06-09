@@ -31,7 +31,7 @@
   # ─────────────────────────────────────────────
   programs.steam = {
     enable = true;
-    remotePlay.openFirewall = true;      # Otvara portove ako strimuješ igre sa drugog kompa
+    remotePlay.openFirewall = true; # Otvara portove ako strimuješ igre sa drugog kompa
     dedicatedServer.openFirewall = true; # Za lokalne servere
     extraCompatPackages = with pkgs; [
       proton-ge-bin # Proton-GE direktno bez protonup-qt
@@ -47,10 +47,11 @@
   # Programi za gejming
   # ─────────────────────────────────────────────
   environment.systemPackages = with pkgs; [
-    heroic      # Pokretač za Epic Games i GOG
-    lutris      # Menadžer za igre i emulatore
-    mangohud    # FPS, temperatura i info overlay u igrama
+    heroic # Pokretač za Epic Games i GOG
+    lutris # Menadžer za igre i emulatore
+    mangohud # FPS, temperatura i info overlay u igrama
     protonup-qt # GUI za upravljanje Proton verzijama
-    vesktop     # Discord klijent optimizovan za Linux
+    vesktop # Discord klijent optimizovan za Linux
+    winetricks
   ];
 }
