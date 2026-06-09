@@ -47,6 +47,6 @@
     nerd-fonts.caskaydia-cove # Chris Titus favorit - Cascadia Code sa ikonama
     nerd-fonts.fira-code # Popularan sa ligaturama
     noto-fonts # Glavni sistemski font
-    noto-fonts-emoji # Emoji podrška
+    noto-fonts-color-emoji
   ];
 }
