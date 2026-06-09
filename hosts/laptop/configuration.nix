@@ -27,7 +27,7 @@
     ../../modules/system/network.nix
     ../../modules/system/locale.nix
     ../../modules/system/drivers.nix
-    ../../modules/system/desktop.nix
+    ../../modules/system/kde.nix
     ../../modules/system/gaming.nix
     ../../modules/user/apps.nix
   ];
