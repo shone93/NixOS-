@@ -18,6 +18,8 @@
     };
   };
 
+  services.power-profiles-daemon.enable = false;
+
   # Isključuje bluetooth kada nije u upotrebi
   services.blueman.enable = true;
   hardware.bluetooth.enable = true;
