@@ -2,17 +2,16 @@
 
 {
   # ─────────────────────────────────────────────
-  # Niri kompozitor
+  # Niri kompozitor - NE importuje se još.
+  # Kada budeš spreman, dodaj u flake.nix systemModules
+  # za host na kome želiš Niri (najpre Stardew).
   # ─────────────────────────────────────────────
-  programs.niri = {
-    enable = true;
-  };
+  programs.niri.enable = true;
 
-  # XDG portal za Wayland (potrebno za screen share, file picker itd.)
   xdg.portal = {
     enable = true;
     extraPortals = with pkgs; [
-      xdg-desktop-portal-gnome # Radi dobro sa Niri
+      xdg-desktop-portal-gnome
     ];
     config.common.default = "*";
   };

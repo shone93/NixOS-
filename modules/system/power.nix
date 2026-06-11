@@ -2,26 +2,29 @@
 
 {
   # ─────────────────────────────────────────────
-  # Power management za laptop
+  # Power management - SAMO laptop (Stardew)
   # ─────────────────────────────────────────────
   services.auto-cpufreq = {
     enable = true;
     settings = {
       battery = {
         governor = "powersave";
-        turbo = "never"; # Isključuje turbo na bateriji
+        turbo = "never";
       };
       charger = {
         governor = "performance";
-        turbo = "auto"; # Uključuje turbo na struju
+        turbo = "auto";
       };
     };
   };
 
-  services.power-profiles-daemon.enable = false;
+  services.power-profiles-daemon.enable = false; # Konflikt sa auto-cpufreq
 
-  # Isključuje bluetooth kada nije u upotrebi
+  # Bluetooth
   services.blueman.enable = true;
   hardware.bluetooth.enable = true;
-  hardware.bluetooth.powerOnBoot = false; # Ne uključuje BT automatski
+  hardware.bluetooth.powerOnBoot = false;
+
+  # WiFi powersave isključen (stabilnija veza)
+  networking.networkmanager.wifi.powersave = false;
 }
