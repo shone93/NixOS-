@@ -28,6 +28,8 @@
 
     # Ostalo
     qbittorrent
+    obsidian
+    syncthing
 
     # Git alati
     git

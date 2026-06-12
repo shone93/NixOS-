@@ -83,6 +83,7 @@
             ./modules/system/users.nix
             ./modules/system/gaming.nix
             ./modules/system/apps-common.nix
+            ./modules/system/syncthing.nix
             # Host-specifično:
             ./modules/system/power.nix # baterija - samo laptop
             ./modules/system/drivers/nvidia-laptop.nix
