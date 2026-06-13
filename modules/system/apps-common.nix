@@ -27,6 +27,7 @@
     keepassxc # Menadžer lozinki
 
     # Ostalo
+    python3
     qbittorrent
     obsidian
     syncthing
