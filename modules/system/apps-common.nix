@@ -21,17 +21,15 @@
 
     # Office i čitači
     libreoffice-fresh
-    evince # PDF
 
     # Komunikacija
     keepassxc # Menadžer lozinki
 
     # Ostalo
     python3
-    qbittorrent
     obsidian
     syncthing
-
+    nodejs # za koriscenje npm torlnk
     # Git alati
     git
     gh
