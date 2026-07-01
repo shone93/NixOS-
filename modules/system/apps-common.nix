@@ -30,6 +30,7 @@
     obsidian
     syncthing
     nodejs # za koriscenje npm torlnk
+    polonium
     # Git alati
     git
     gh
