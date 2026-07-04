@@ -13,41 +13,62 @@
       lookAndFeel = "org.kde.breezedark.desktop";
     };
 
-    # 4 virtuelna desktopa (da Ctrl+F1..F4 imaju gde da idu)
     kwin.virtualDesktops = {
       number = 4;
       rows = 1;
     };
 
-    # NumLock uključen po defaultu (0 = On u KDE logici)
-    configFile.kcminputrc."Keyboard"."NumLock".value = 0;
+    # NumLock uključen po defaultu (ispravan način - preko kcminputrc)
+    configFile.kcminputrc.Keyboard.NumLock = 0;
 
     shortcuts = {
+      # ─────────────────────────────────────────────
+      # KDE NATIVE - gasimo sve što krade tiling tastere
+      # ─────────────────────────────────────────────
       kwin = {
         "Window Close" = "Meta+Q";
         "Overview" = "Meta+Tab";
 
-        # Virtuelni desktopovi - Ctrl+F1..F4 (KDE standard)
+        # UGASI KDE Quick Tile (kradu Meta+strelice)
+        "Window Quick Tile Left" = "none";
+        "Window Quick Tile Right" = "none";
+        "Window Quick Tile Top" = "none";
+        "Window Quick Tile Bottom" = "none";
+
+        # UGASI "Switch One Desktop" (kradu Meta+Ctrl+strelice = resize)
+        "Switch One Desktop Down" = "none";
+        "Switch One Desktop Up" = "none";
+        "Switch One Desktop to the Left" = "none";
+        "Switch One Desktop to the Right" = "none";
+
+        # UGASI "Window to Next/Previous Screen" (kradu Meta+Shift+strelice = move)
+        "Window to Next Screen" = "none";
+        "Window to Previous Screen" = "none";
+
+        # UGASI KDE native tiling editor (krade Meta+T)
+        "Edit Tiles" = "none";
+
+        # MinimizeAll krade Meta+Shift+D
+        "MinimizeAll" = "none";
+
+        # Virtuelni desktopovi ostaju na Ctrl+F1..F4
         "Switch to Desktop 1" = "Ctrl+F1";
         "Switch to Desktop 2" = "Ctrl+F2";
         "Switch to Desktop 3" = "Ctrl+F3";
         "Switch to Desktop 4" = "Ctrl+F4";
-
-        # KDE native tiling editor - oslobodi Meta+T
-        "Edit Tiles" = "none";
       };
 
       # ─────────────────────────────────────────────
-      # KROHNKITE - remapiranje (oslobađa plain Meta+slovo)
+      # KROHNKITE - sada kad su KDE konflikti ugašeni
       # ─────────────────────────────────────────────
       kwin_scripts = {
-        # Fokus na strelice
+        # Fokus - Meta+strelice
         "Krohnkite: Focus Up" = "Meta+Up";
         "Krohnkite: Focus Down" = "Meta+Down";
         "Krohnkite: Focus Left" = "Meta+Left";
         "Krohnkite: Focus Right" = "Meta+Right";
 
-        # Pomeranje prozora - Meta+Shift+strelice
+        # Pomeranje - Meta+Shift+strelice
         "Krohnkite: Move Up/Prev" = "Meta+Shift+Up";
         "Krohnkite: Move Down/Next" = "Meta+Shift+Down";
         "Krohnkite: Move Left" = "Meta+Shift+Left";
@@ -59,25 +80,16 @@
         "Krohnkite: Grow Width" = "Meta+Ctrl+Right";
         "Krohnkite: Shrink Width" = "Meta+Ctrl+Left";
 
-        # Layout kontrole - Meta+Shift+slovo (ne konfliktuje sa launchers)
+        # Layout - Meta+Shift+slovo
         "Krohnkite: Tile Layout" = "Meta+Shift+T";
         "Krohnkite: Monocle Layout" = "Meta+Shift+M";
         "Krohnkite: Toggle Float" = "Meta+Shift+F";
         "Krohnkite: Next Layout" = "Meta+Shift+Space";
         "Krohnkite: Set master" = "Meta+Shift+Return";
         "Krohnkite: Rotate" = "Meta+Shift+R";
-
-        # Oslobodi konfliktne plain Meta+slovo bindove
-        "Krohnkite: Decrease" = "none";       # bio Meta+D (= Discord)
-        "Krohnkite: Increase" = "none";       # bio Meta+I
-        "Krohnkite: Focus Next" = "none";
-        "Krohnkite: Focus Previous" = "none";
       };
 
-      # KRunner
       "services/org.kde.krunner.desktop"."_launch" = "Meta+Space";
-
-      # Zaključavanje - Meta+Escape (L = Lutris)
       "ksmserver"."Lock Session" = "Meta+Escape";
     };
 
