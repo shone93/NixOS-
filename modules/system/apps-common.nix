@@ -30,7 +30,7 @@
     obsidian
     syncthing
     nodejs # za koriscenje npm torlnk
-    polonium
+    kdePackages.krohnkite
     # Git alati
     git
     gh
