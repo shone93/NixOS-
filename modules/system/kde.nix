@@ -11,13 +11,18 @@
   };
   services.desktopManager.plasma6.enable = true;
 
-  # Crna pozadina za SDDM login ekran.
-  # Ne zavisi od wallpapera - uvek crna, nikad se ne menja.
+  # Generiši crnu sliku i postavi je kao SDDM pozadinu.
+  # Breeze SDDM čita 'background=' putanju, pa crna slika radi
+  # tamo gde 'type=color' nije.
+  environment.etc."sddm-black.png".source =
+    pkgs.runCommand "sddm-black.png" { } ''
+      ${pkgs.imagemagick}/bin/convert -size 1920x1080 xc:black $out
+    '';
+
   environment.etc."sddm/themes/breeze/theme.conf.user".text = ''
     [General]
-    type=color
-    color=#000000
-    background=
+    background=/etc/sddm-black.png
+    type=image
   '';
 
   # ─────────────────────────────────────────────
