@@ -21,6 +21,15 @@
       url = "github:0xc000022070/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    yazi-plugins = {
+      url = "github:lordkekz/nix-yazi-plugins";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    yazi-flavors = {
+      url = "github:aguirre-matteo/nix-yazi-flavors";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs =

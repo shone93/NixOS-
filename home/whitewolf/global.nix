@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, inputs, ... }:
 
 {
   # ─────────────────────────────────────────────
@@ -18,11 +18,15 @@
   };
 
   # Rebuild skripta - auto-detektuje hostname (#$(hostname))
-  # tako da ista komanda radi i na Stardew i na SolidSnake.
   home.shellAliases = {
     rebuild = "sudo nixos-rebuild switch --flake ~/Documents/nixos-config#$(hostname) && (cd ~/Documents/nixos-config && git add . && git commit -m rebuild && git push)";
     update = "cd ~/Documents/nixos-config && nix flake update";
   };
+
+  # 'shortcuts' komanda - cheatsheet svih prečica
+  home.packages = [
+    (pkgs.writeShellScriptBin "shortcuts" (builtins.readFile ../common/shortcuts))
+  ];
 
   # Default aplikacije
   xdg.mimeApps = {
@@ -40,10 +44,91 @@
   # Ghostty - whitewolf dodaje fastfetch na startup (preko zajedničke baze)
   programs.ghostty.settings.command = "bash -c 'fastfetch; exec bash'";
 
-  # Yazi - terminal file manager
+  # ─────────────────────────────────────────────
+  # Yazi - terminal file manager (reproducible, sa pluginovima)
+  # ─────────────────────────────────────────────
   programs.yazi = {
     enable = true;
+    enableBashIntegration = true; # 'y' komanda menja folder na izlazu
+
     settings = {
+      mgr = {
+        show_hidden = false;
+        sort_by = "natural";
+        sort_dir_first = true;
+        linemode = "size";
+      };
+      preview = {
+        max_width = 1000;
+        max_height = 1000;
+        image_filter = "lanczos3";
+      };
+    };
+
+    # VSCode Dark Plus tema
+    flavors = {
+      inherit (pkgs.yaziFlavors) vscode-dark-plus;
+    };
+    theme.flavor = {
+      dark = "vscode-dark-plus";
+    };
+
+    # Plugins (reproducible preko nix-yazi-plugins)
+    plugins = with pkgs.yaziPlugins; {
+      inherit
+        full-border # čist border oko panela
+        git # git status na fajlovima
+        smart-enter # enter otvara fajl ili ulazi u folder
+        jump-to-char # brza navigacija
+        chmod # permisije bez izlaska
+        mount # USB/drive mount
+        ouch # extract/compress arhiva
+        starship # lep prompt u yazi
+        ;
+    };
+
+    initLua = ''
+      require("full-border"):setup()
+      require("git"):setup()
+      require("starship"):setup()
+    '';
+
+    keymap = {
+      mgr.prepend_keymap = [
+        {
+          on = [ "l" ];
+          run = "plugin smart-enter";
+          desc = "Uđi u folder ili otvori fajl";
+        }
+        {
+          on = [ "<Enter>" ];
+          run = "plugin smart-enter";
+          desc = "Uđi u folder ili otvori fajl";
+        }
+        {
+          on = [ "f" ];
+          run = "plugin jump-to-char";
+          desc = "Skoči na karakter";
+        }
+        {
+          on = [
+            "c"
+            "m"
+          ];
+          run = "plugin chmod";
+          desc = "Promeni permisije";
+        }
+        {
+          on = [ "M" ];
+          run = "plugin mount";
+          desc = "Mount meni";
+        }
+        {
+          on = [ "C" ];
+          run = "plugin ouch --args=zip";
+          desc = "Kompresuj u arhivu";
+        }
+      ];
     };
   };
 

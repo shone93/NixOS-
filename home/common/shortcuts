@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+# Shortcuts cheatsheet - prikazuje sve prečice sortirane po tipu
+
+# Boje (Berserk paleta - crvena/siva/bela)
+RED='\033[38;2;192;57;43m'
+GRAY='\033[38;2;150;150;160m'
+WHITE='\033[38;2;245;245;245m'
+DIM='\033[38;2;100;100;110m'
+BOLD='\033[1m'
+RESET='\033[0m'
+
+key() { printf "  ${RED}${BOLD}%-18s${RESET} ${WHITE}%s${RESET}\n" "$1" "$2"; }
+header() { printf "\n${GRAY}${BOLD}▍ %s${RESET}\n" "$1"; }
+
+printf "${RED}${BOLD}"
+cat << 'EOF'
+   ╔═══════════════════════════════╗
+   ║   SHORTCUTS  —  Stardew        ║
+   ╚═══════════════════════════════╝
+EOF
+printf "${RESET}"
+
+header "PROGRAMI (Meta + slovo)"
+key "Meta + T" "Ghostty (terminal)"
+key "Meta + E" "Yazi (file manager)"
+key "Meta + Z" "Zed (editor)"
+key "Meta + B" "Zen Browser"
+key "Meta + S" "Steam"
+key "Meta + L" "Lutris"
+key "Meta + G" "Heroic (Epic/GOG)"
+key "Meta + O" "Obsidian"
+key "Meta + D" "Discord (vesktop)"
+key "Meta + V" "LibreOffice"
+key "Meta + C" "Blender (kad se instalira)"
+
+header "NAVIGACIJA PROZORA (KDE stock)"
+key "Meta + ←/→/↑/↓" "Fokus na prozor u pravcu"
+key "Meta + Tab" "Kroz otvorene prozore"
+key "Meta + W" "Overview (svi prozori)"
+key "Ctrl + F1-F4" "Virtuelni desktop 1-4"
+key "Meta + Q" "Zatvori prozor"
+key "Meta + Escape" "Zaključaj ekran"
+
+header "TILING (Krohnkite)"
+key "Meta + J / K" "Fokus sledeći / prethodni"
+key "Meta + Shift+J/K" "Pomeri prozor u stacku"
+key "Meta + H / L" "Smanji / povećaj širinu"
+key "Meta + F" "Float (za igre!)"
+key "Meta + M" "Monocle (fullscreen fokus)"
+key "Meta + Return" "Postavi kao master"
+
+header "YAZI (unutar file managera)"
+key "j / k" "Gore / dole"
+key "h / l" "Nazad / uđi u folder"
+key "y / x / p" "Kopiraj / iseci / nalepi"
+key "d / D" "U kantu / trajno obriši"
+key "a / r" "Napravi / preimenuj"
+key "/ ili s" "Pretraga"
+key "Space" "Selektuj fajl"
+key "Enter" "Otvori"
+key "q" "Izađi (sa 'y' menja folder)"
+
+header "SISTEM"
+key "Meta + Space" "KRunner (pokretač)"
+key "Print" "Screenshot (Spectacle)"
+key "shortcuts" "Prikaži ovaj meni"
+
+printf "\n${DIM}Tip: 'shortcuts' bilo kad da vidiš prečice.${RESET}\n\n"

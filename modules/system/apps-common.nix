@@ -1,6 +1,12 @@
 { pkgs, inputs, ... }:
 
 {
+
+  nixpkgs.overlays = [
+    inputs.yazi-plugins.overlays.default
+    inputs.yazi-flavors.overlays.default
+  ];
+
   environment.systemPackages = with pkgs; [
     # Internet pregledači
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
