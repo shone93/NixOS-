@@ -2,17 +2,23 @@
 
 {
   # ─────────────────────────────────────────────
-  # KDE Plasma 6 + SDDM (minimalan tamni login)
+  # KDE Plasma 6 + SDDM (minimalan crni login)
   # ─────────────────────────────────────────────
   services.displayManager.sddm = {
     enable = true;
     wayland.enable = true;
-    theme = "breeze"; # Čist, minimalan, tamni login ekran
+    theme = "breeze";
   };
   services.desktopManager.plasma6.enable = true;
 
-  # Tamna SDDM pozadina (siva/crna) umesto default plave
-  # Breeze SDDM prati sistemsku temu; za čistu boju koristimo običnu pozadinu.
+  # Crna pozadina za SDDM login ekran.
+  # Ne zavisi od wallpapera - uvek crna, nikad se ne menja.
+  environment.etc."sddm/themes/breeze/theme.conf.user".text = ''
+    [General]
+    type=color
+    color=#000000
+    background=
+  '';
 
   # ─────────────────────────────────────────────
   # KDE aplikacije
