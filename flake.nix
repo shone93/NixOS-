@@ -76,14 +76,12 @@
           systemModules = [
             ./modules/system/core.nix
             ./modules/system/boot.nix
-            ./modules/system/audio.nix
-            ./modules/system/network.nix
-            ./modules/system/locale.nix
             ./modules/system/kde.nix
             ./modules/system/users.nix
             ./modules/system/gaming.nix
             ./modules/system/apps-common.nix
             ./modules/system/syncthing.nix
+            ./modules/system/system-base.nix
             # Host-specifično:
             ./modules/system/power.nix # baterija - samo laptop
             ./modules/system/drivers/nvidia-laptop.nix

@@ -40,6 +40,13 @@
   # Ghostty - whitewolf dodaje fastfetch na startup (preko zajedničke baze)
   programs.ghostty.settings.command = "bash -c 'fastfetch; exec bash'";
 
+  # Yazi - terminal file manager
+  programs.yazi = {
+    enable = true;
+    settings = {
+    };
+  };
+
   # ─────────────────────────────────────────────
   # Fastfetch - riced
   # ─────────────────────────────────────────────

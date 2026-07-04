@@ -31,6 +31,12 @@
     syncthing
     nodejs # za koriscenje npm torlnk
     kdePackages.krohnkite
+    ffmpegthumbnailer # video thumbnails
+    poppler # PDF previews
+    imagemagick # image handling
+    fd # brže pretraživanje fajlova
+    ripgrep # brzo pretraživanje sadržaja
+    fzf # fuzzy finder integracija
     # Git alati
     git
     gh
