@@ -3,7 +3,6 @@
 {
   # ─────────────────────────────────────────────
   # Zajednička KDE Plasma podešavanja (oba korisnika)
-  # Wallpaper se postavlja per-user-per-host.
   # ─────────────────────────────────────────────
   programs.plasma = {
     enable = true;
@@ -15,16 +14,30 @@
     };
 
     # ─────────────────────────────────────────────
-    # Prečice za prozore (KDE stock + izmene)
+    # Prečice za prozore + čišćenje konflikata
     # ─────────────────────────────────────────────
     shortcuts = {
       kwin = {
         "Window Close" = "Meta+Q";
-        "Overview" = "Meta+W";
-        "Window Maximize" = "Meta+Up";
-        "Window Minimize" = "Meta+Down";
+        "Overview" = "Meta+Tab"; # premešteno sa Meta+W
+
+        # Navigacija između prozora (fokus u pravcu)
+        "Switch Window Left" = "Meta+Left";
+        "Switch Window Right" = "Meta+Right";
+        "Switch Window Up" = "Meta+Up";
+        "Switch Window Down" = "Meta+Down";
+
+        # Virtuelni desktopovi na Meta+1..4
+        "Switch to Desktop 1" = "Meta+1";
+        "Switch to Desktop 2" = "Meta+2";
+        "Switch to Desktop 3" = "Meta+3";
+        "Switch to Desktop 4" = "Meta+4";
       };
-      # Zaključavanje pomereno sa Meta+L (jer L = Lutris)
+
+      # KRunner na Meta+Space
+      "services/org.kde.krunner.desktop"."_launch" = "Meta+Space";
+
+      # Zaključavanje pomereno sa Meta+L (L = Lutris)
       "ksmserver"."Lock Session" = "Meta+Escape";
     };
 
@@ -50,7 +63,7 @@
       "launch-zen" = {
         name = "Zen Browser";
         key = "Meta+B";
-        command = "zen";
+        command = "zen-beta";
       };
       "launch-steam" = {
         name = "Steam";
