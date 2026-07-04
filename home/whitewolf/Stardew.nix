@@ -4,6 +4,8 @@
   # WhiteWolf na laptopu (Stardew)
   imports = [ ./global.nix ];
 
-  # Laptop wallpaper (jedan ekran)
   programs.plasma.workspace.wallpaper = ../wallpapers/whitewolf-Stardew.jpg;
+
+  # Lock screen koristi istu sliku kao desktop
+  programs.plasma.kscreenlocker.appearance.wallpaper = ../wallpapers/whitewolf-Stardew.jpg;
 }
