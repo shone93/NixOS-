@@ -97,7 +97,7 @@
     # Pokretanje programa (PLAIN Meta + slovo)
     # ─────────────────────────────────────────────
     hotkeys.commands = {
-      "launch-terminal" = { name = "Ghostty"; key = "Meta+T"; command = "ghostty"; };
+      "launch-terminal" = { name = "Ghostty"; key = "Meta+Return"; command = "ghostty"; };
       "launch-yazi" = { name = "Yazi"; key = "Meta+E"; command = "ghostty -e yazi"; };
       "launch-zed" = { name = "Zed"; key = "Meta+Z"; command = "zeditor"; };
       "launch-zen" = { name = "Zen Browser"; key = "Meta+B"; command = "zen-beta"; };

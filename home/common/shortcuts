@@ -20,7 +20,7 @@ EOF
 printf "${RESET}"
 
 header "PROGRAMI (Meta + slovo)"
-key "Meta + T" "Ghostty (terminal)"
+key "Meta + Return" "Ghostty (terminal)"
 key "Meta + E" "Yazi (file manager)"
 key "Meta + Z" "Zed (editor)"
 key "Meta + B" "Zen Browser"
