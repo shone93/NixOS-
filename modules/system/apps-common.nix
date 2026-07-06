@@ -43,6 +43,8 @@
     fd # brže pretraživanje fajlova
     ripgrep # brzo pretraživanje sadržaja
     fzf # fuzzy finder integracija
+    claude-code # AI kod editor
+
     # Git alati
     git
     gh
