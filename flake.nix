@@ -90,7 +90,8 @@
             ./modules/system/core.nix
             ./modules/system/boot.nix
             ./modules/system/kde.nix
-            ./modules/system/users.nix
+            ./modules/system/users/whitewolf.nix
+            ./modules/system/users/lizzywizzy.nix
             ./modules/system/gaming.nix
             ./modules/system/apps-common.nix
             ./modules/system/syncthing.nix
@@ -112,7 +113,8 @@
             ./modules/system/core.nix
             ./modules/system/boot.nix
             ./modules/system/kde.nix
-            ./modules/system/users.nix
+            ./modules/system/users/whitewolf.nix
+            ./modules/system/users/lizzywizzy.nix
             ./modules/system/gaming.nix
             ./modules/system/apps-common.nix
             ./modules/system/syncthing.nix
