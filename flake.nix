@@ -128,6 +128,28 @@
             lizzywizzy = ./home/lizzywizzy/SolidSnake.nix;
           };
         };
+
+        # ───────────── LAPTOP (Evangelion, novi glavni) ─────────────
+        # Jedan korisnik: SAMO whitewolf. lizzywizzy se NE pravi ovde.
+        Evangelion = mkHost {
+          hostname = "Evangelion";
+          systemModules = [
+            ./modules/system/core.nix
+            ./modules/system/boot.nix
+            ./modules/system/kde.nix
+            ./modules/system/users/whitewolf.nix
+            ./modules/system/gaming.nix
+            ./modules/system/apps-common.nix
+            ./modules/system/syncthing.nix
+            ./modules/system/system-base.nix
+            # Host-specifično:
+            ./modules/system/power.nix # baterija - laptop
+            ./modules/system/drivers/nvidia-placeholder.nix
+          ];
+          homeConfigs = {
+            whitewolf = ./home/whitewolf/Evangelion.nix;
+          };
+        };
       };
     };
 }
