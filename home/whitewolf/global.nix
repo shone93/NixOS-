@@ -45,6 +45,14 @@
   programs.ghostty.settings.command = "bash -c 'fastfetch; exec bash'";
 
   # ─────────────────────────────────────────────
+  # Zoxide - pametna navigacija po direktorijumima (frecency)
+  # ─────────────────────────────────────────────
+  programs.zoxide = {
+    enable = true;
+    enableBashIntegration = true;
+  };
+
+  # ─────────────────────────────────────────────
   # Yazi - terminal file manager (reproducible, sa pluginovima)
   # ─────────────────────────────────────────────
   programs.yazi = {
@@ -91,6 +99,7 @@
       require("full-border"):setup()
       require("git"):setup()
       require("starship"):setup()
+      require("zoxide"):setup { update_db = true }
     '';
 
     keymap = {
@@ -109,6 +118,16 @@
           on = [ "f" ];
           run = "plugin jump-to-char";
           desc = "Skoči na karakter";
+        }
+        {
+          on = [ "z" ];
+          run = "plugin fzf";
+          desc = "Fuzzy find fajl (fzf)";
+        }
+        {
+          on = [ "Z" ];
+          run = "plugin zoxide";
+          desc = "Skoči na direktorijum (zoxide, frecency)";
         }
         {
           on = [
