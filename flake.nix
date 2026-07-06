@@ -43,6 +43,19 @@
     let
       system = "x86_64-linux";
 
+      # Moduli koje dele SVI Linux hostovi (osnovni sloj).
+      # Host-specifično (lizzywizzy, gaming, power, drajveri, apps-desktop)
+      # se dodaje po hostu preko `commonModules ++ [ ... ]`.
+      commonModules = [
+        ./modules/system/core.nix
+        ./modules/system/boot.nix
+        ./modules/system/kde.nix
+        ./modules/system/users/whitewolf.nix
+        ./modules/system/apps-common.nix
+        ./modules/system/syncthing.nix
+        ./modules/system/system-base.nix
+      ];
+
       # Helper funkcija - smanjuje ponavljanje za svaki host.
       # Svaki host samo prosledi svoje ime, host-specifične module
       # i koje home fajlove dobija svaki korisnik na toj mašini.
@@ -86,16 +99,9 @@
         # ───────────── LAPTOP (Lenovo IdeaPad Y700) ─────────────
         Stardew = mkHost {
           hostname = "Stardew";
-          systemModules = [
-            ./modules/system/core.nix
-            ./modules/system/boot.nix
-            ./modules/system/kde.nix
-            ./modules/system/users/whitewolf.nix
+          systemModules = commonModules ++ [
             ./modules/system/users/lizzywizzy.nix
             ./modules/system/gaming.nix
-            ./modules/system/apps-common.nix
-            ./modules/system/syncthing.nix
-            ./modules/system/system-base.nix
             # Host-specifično:
             ./modules/system/power.nix # baterija - samo laptop
             ./modules/system/drivers/nvidia-laptop.nix
@@ -109,16 +115,9 @@
         # ───────────── DESKTOP (GTX 1080, budući PC) ─────────────
         SolidSnake = mkHost {
           hostname = "SolidSnake";
-          systemModules = [
-            ./modules/system/core.nix
-            ./modules/system/boot.nix
-            ./modules/system/kde.nix
-            ./modules/system/users/whitewolf.nix
+          systemModules = commonModules ++ [
             ./modules/system/users/lizzywizzy.nix
             ./modules/system/gaming.nix
-            ./modules/system/apps-common.nix
-            ./modules/system/syncthing.nix
-            ./modules/system/system-base.nix
             # Host-specifično:
             ./modules/system/apps-desktop.nix # blender, gimp, inkscape
             ./modules/system/drivers/nvidia-desktop.nix
@@ -133,15 +132,8 @@
         # Jedan korisnik: SAMO whitewolf. lizzywizzy se NE pravi ovde.
         Evangelion = mkHost {
           hostname = "Evangelion";
-          systemModules = [
-            ./modules/system/core.nix
-            ./modules/system/boot.nix
-            ./modules/system/kde.nix
-            ./modules/system/users/whitewolf.nix
+          systemModules = commonModules ++ [
             ./modules/system/gaming.nix
-            ./modules/system/apps-common.nix
-            ./modules/system/syncthing.nix
-            ./modules/system/system-base.nix
             # Host-specifično:
             ./modules/system/power.nix # baterija - laptop
             ./modules/system/drivers/nvidia-placeholder.nix
