@@ -20,6 +20,11 @@
   home.shellAliases = {
     rebuild = "sudo nixos-rebuild switch --flake ~/Documents/nixos-config#$(hostname) && (cd ~/Documents/nixos-config && git add . && git commit -m rebuild && git push)";
     update = "cd ~/Documents/nixos-config && nix flake update";
+
+    # eza kao zamena za ls (ikone, git status, folderi prvi)
+    ls = "eza --icons --group-directories-first";
+    ll = "eza -l --icons --group-directories-first --git";
+    la = "eza -la --icons --group-directories-first --git";
   };
 
   # 'shortcuts' komanda - cheatsheet svih prečica
@@ -73,8 +78,20 @@
     };
 
     # VSCode Dark Plus tema
+    # NAPOMENA: upstream flavor je u STAROM yazi formatu ($schema, [manager],
+    # `name =` pravila) i yazi 26.5.6 ga odbija ("must be a kebab-cased string").
+    # Patchujemo u novi format: izbaci $schema liniju, [manager]->[mgr],
+    # `{ name =`->`{ url =` (filetype pravila).
     flavors = {
-      inherit (pkgs.yaziFlavors) vscode-dark-plus;
+      vscode-dark-plus = pkgs.runCommandLocal "yazi-flavor-vscode-dark-plus-fixed" { } ''
+        cp -r ${pkgs.yaziFlavors.vscode-dark-plus} $out
+        chmod -R u+w $out
+        sed -i \
+          -e '/schemas\/theme.json/d' \
+          -e 's/^\[manager\]/[mgr]/' \
+          -e 's/{ name =/{ url =/g' \
+          $out/flavor.toml
+      '';
     };
     theme.flavor = {
       dark = "vscode-dark-plus";

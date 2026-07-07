@@ -22,6 +22,7 @@
     # Multimedija
     mpv # Video plejer
     yt-dlp # YouTube download/stream
+    ffmpeg # konverzija/merge audio+video (yt-dlp ga koristi za spajanje)
     amberol # Muzički plejer
     loupe # Pregledač slika
 
@@ -43,6 +44,7 @@
     fd # brže pretraživanje fajlova
     ripgrep # brzo pretraživanje sadržaja
     fzf # fuzzy finder integracija
+    eza # moderan `ls` (ikone, git status, boje)
     claude-code # AI kod editor
 
     # Git alati
@@ -52,6 +54,7 @@
     # Sistemski alati
     fastfetch
     btop
+    ncdu # disk usage TUI (gde je nestao prostor)
     wl-clipboard
     winetricks
 
