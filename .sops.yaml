@@ -1,0 +1,28 @@
+# .sops.yaml — pravila šifrovanja za sops
+# ⚠️  REPLACE sve age1REPLACE_* vrednosti PRAVIM javnim age ključevima. ⚠️
+#
+# Host ključ (izvedi iz SSH host ključa):
+#   nix shell nixpkgs#ssh-to-age -c sh -c 'ssh-to-age < /etc/ssh/ssh_host_ed25519_key.pub'
+# User ključ:
+#   age-keygen -o ~/.config/sops/age/keys.txt   # javni deo je "age1..."
+
+keys:
+  # ---- Hostovi ----
+  - &host_stardew     age1REPLACE_STARDEW_HOST_KEY
+  - &host_solidsnake  age1REPLACE_SOLIDSNAKE_HOST_KEY
+  - &host_evangelion  age1REPLACE_EVANGELION_HOST_KEY
+  # ---- Korisnici ----
+  - &user_whitewolf   age1REPLACE_WHITEWOLF_USER_KEY
+  - &user_lizzywizzy  age1REPLACE_LIZZYWIZZY_USER_KEY
+
+creation_rules:
+  # Sve tajne u secrets.yaml se šifruju za sve hostove + korisnike.
+  # Kasnije možeš razdvojiti po host/user granularnije.
+  - path_regex: secrets\.yaml$
+    key_groups:
+      - age:
+          - *host_stardew
+          - *host_solidsnake
+          - *host_evangelion
+          - *user_whitewolf
+          - *user_lizzywizzy

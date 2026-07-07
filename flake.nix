@@ -30,6 +30,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs =
@@ -54,6 +59,7 @@
         ./modules/system/apps-common.nix
         ./modules/system/syncthing.nix
         ./modules/system/system-base.nix
+        ./modules/system/secrets.nix
       ];
 
       # Helper funkcija - smanjuje ponavljanje za svaki host.
