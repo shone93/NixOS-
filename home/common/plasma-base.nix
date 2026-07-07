@@ -56,37 +56,36 @@
         "Switch to Desktop 2" = "Ctrl+F2";
         "Switch to Desktop 3" = "Ctrl+F3";
         "Switch to Desktop 4" = "Ctrl+F4";
-      };
 
-      # ─────────────────────────────────────────────
-      # KROHNKITE - sada kad su KDE konflikti ugašeni
-      # ─────────────────────────────────────────────
-      kwin_scripts = {
+        # ─────────────────────────────────────────────
+        # KROHNKITE - vezuje se na [kwin] komponentu preko action ID-jeva
+        # (NE preko "Krohnkite: ..." imena - to ide u mrtvu kwin_scripts sekciju)
+        # ─────────────────────────────────────────────
         # Fokus - Meta+strelice
-        "Krohnkite: Focus Up" = "Meta+Up";
-        "Krohnkite: Focus Down" = "Meta+Down";
-        "Krohnkite: Focus Left" = "Meta+Left";
-        "Krohnkite: Focus Right" = "Meta+Right";
+        "KrohnkiteFocusUp" = "Meta+Up";
+        "KrohnkiteFocusDown" = "Meta+Down";
+        "KrohnkiteFocusLeft" = "Meta+Left";
+        "KrohnkiteFocusRight" = "Meta+Right";
 
         # Pomeranje - Meta+Shift+strelice
-        "Krohnkite: Move Up/Prev" = "Meta+Shift+Up";
-        "Krohnkite: Move Down/Next" = "Meta+Shift+Down";
-        "Krohnkite: Move Left" = "Meta+Shift+Left";
-        "Krohnkite: Move Right" = "Meta+Shift+Right";
+        "KrohnkiteShiftUp" = "Meta+Shift+Up";
+        "KrohnkiteShiftDown" = "Meta+Shift+Down";
+        "KrohnkiteShiftLeft" = "Meta+Shift+Left";
+        "KrohnkiteShiftRight" = "Meta+Shift+Right";
 
         # Resize - Meta+Ctrl+strelice
-        "Krohnkite: Grow Height" = "Meta+Ctrl+Down";
-        "Krohnkite: Shrink Height" = "Meta+Ctrl+Up";
-        "Krohnkite: Grow Width" = "Meta+Ctrl+Right";
-        "Krohnkite: Shrink Width" = "Meta+Ctrl+Left";
+        "KrohnkiteGrowHeight" = "Meta+Ctrl+Down";
+        "KrohnkiteShrinkHeight" = "Meta+Ctrl+Up";
+        "KrohnkitegrowWidth" = "Meta+Ctrl+Right";
+        "KrohnkiteShrinkWidth" = "Meta+Ctrl+Left";
 
-        # Layout - Meta+Shift+slovo
-        "Krohnkite: Tile Layout" = "Meta+Shift+T";
-        "Krohnkite: Monocle Layout" = "Meta+Shift+M";
-        "Krohnkite: Toggle Float" = "Meta+Shift+F";
-        "Krohnkite: Next Layout" = "Meta+Shift+Space";
-        "Krohnkite: Set master" = "Meta+Shift+Return";
-        "Krohnkite: Rotate" = "Meta+Shift+R";
+        # Layout - Meta+Shift+slovo/strelica
+        "KrohnkiteTileLayout" = "Meta+Shift+T";
+        "KrohnkiteMonocleLayout" = "Meta+Shift+M";
+        "KrohnkiteToggleFloat" = "Meta+Shift+F";
+        "KrohnkiteNextLayout" = "Meta+Shift+Space";
+        "KrohnkiteSetMaster" = "Meta+Shift+Return";
+        "KrohnkiteRotate" = "Meta+Shift+R";
       };
 
       "services/org.kde.krunner.desktop"."_launch" = "Meta+Space";
