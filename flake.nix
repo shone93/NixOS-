@@ -2,6 +2,12 @@
   description = "Moja NixOS konfiguracija";
 
   inputs = {
+    # STABILNOST (odluka za čoveka): trenutno prati `nixos-unstable`.
+    # Za manje iznenađenja razmisli o pinovanju na stabilan kanal
+    # `nixos-26.05` (poklapa se sa stateVersion 26.05). Alternativa: ostani
+    # na unstable ali dodaj poseban `nixpkgs-stable` input za cherry-pick.
+    # Preporuka: pinuj `nixos-26.05` za glavne mašine, unstable po želji na testu.
+    # (NIJE menjano automatski — promeni URL sam kad odlučiš.)
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     home-manager = {
@@ -30,6 +36,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs =
@@ -43,16 +54,34 @@
     let
       system = "x86_64-linux";
 
+      # Moduli koje dele SVI Linux hostovi (osnovni sloj).
+      # Host-specifično (lizzywizzy, gaming, power, drajveri, apps-desktop)
+      # se dodaje po hostu preko `commonModules ++ [ ... ]`.
+      commonModules = [
+        ./modules/system/core.nix
+        ./modules/system/boot.nix
+        ./modules/system/kde.nix
+        ./modules/system/users/whitewolf.nix
+        ./modules/system/apps-common.nix
+        ./modules/system/syncthing.nix
+        ./modules/system/system-base.nix
+        ./modules/system/secrets.nix
+      ];
+
       # Helper funkcija - smanjuje ponavljanje za svaki host.
       # Svaki host samo prosledi svoje ime, host-specifične module
       # i koje home fajlove dobija svaki korisnik na toj mašini.
+      # mkHost: host se opisuje preko podataka (data-driven).
+      # homeConfigs je attrset: korisničko-ime -> putanja do home fajla,
+      # pa host može imati proizvoljan skup korisnika (npr. samo whitewolf).
       mkHost =
         {
           hostname,
           systemModules,
-          whitewolfHome,
-          lizzywizzyHome,
+          homeConfigs,
         }:
+        # TODO: darwin — kad se dodaju macOS hostovi, ovde granaj na
+        # inputs.nix-darwin.lib.darwinSystem umesto nixpkgs.lib.nixosSystem.
         nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = { inherit inputs; };
@@ -71,8 +100,8 @@
               home-manager.sharedModules = [
                 plasma-manager.homeModules.plasma-manager
               ];
-              home-manager.users.whitewolf = import whitewolfHome;
-              home-manager.users.lizzywizzy = import lizzywizzyHome;
+              # Svaki korisnik iz homeConfigs dobija svoj home fajl.
+              home-manager.users = builtins.mapAttrs (_user: path: import path) homeConfigs;
             }
           ];
         };
@@ -82,42 +111,48 @@
         # ───────────── LAPTOP (Lenovo IdeaPad Y700) ─────────────
         Stardew = mkHost {
           hostname = "Stardew";
-          systemModules = [
-            ./modules/system/core.nix
-            ./modules/system/boot.nix
-            ./modules/system/kde.nix
-            ./modules/system/users.nix
+          systemModules = commonModules ++ [
+            ./modules/system/users/lizzywizzy.nix
             ./modules/system/gaming.nix
-            ./modules/system/apps-common.nix
-            ./modules/system/syncthing.nix
-            ./modules/system/system-base.nix
             # Host-specifično:
             ./modules/system/power.nix # baterija - samo laptop
             ./modules/system/drivers/nvidia-laptop.nix
           ];
-          whitewolfHome = ./home/whitewolf/Stardew.nix;
-          lizzywizzyHome = ./home/lizzywizzy/Stardew.nix;
+          homeConfigs = {
+            whitewolf = ./home/whitewolf/Stardew.nix;
+            lizzywizzy = ./home/lizzywizzy/Stardew.nix;
+          };
         };
 
         # ───────────── DESKTOP (GTX 1080, budući PC) ─────────────
         SolidSnake = mkHost {
           hostname = "SolidSnake";
-          systemModules = [
-            ./modules/system/core.nix
-            ./modules/system/boot.nix
-            ./modules/system/audio.nix
-            ./modules/system/network.nix
-            ./modules/system/locale.nix
-            ./modules/system/kde.nix
-            ./modules/system/users.nix
+          systemModules = commonModules ++ [
+            ./modules/system/users/lizzywizzy.nix
             ./modules/system/gaming.nix
-            ./modules/system/apps-common.nix
             # Host-specifično:
             ./modules/system/apps-desktop.nix # blender, gimp, inkscape
             ./modules/system/drivers/nvidia-desktop.nix
           ];
-          whitewolfHome = ./home/whitewolf/SolidSnake.nix;
-          lizzywizzyHome = ./home/lizzywizzy/SolidSnake.nix;
+          homeConfigs = {
+            whitewolf = ./home/whitewolf/SolidSnake.nix;
+            lizzywizzy = ./home/lizzywizzy/SolidSnake.nix;
+          };
+        };
+
+        # ───────────── LAPTOP (Evangelion, novi glavni) ─────────────
+        # Jedan korisnik: SAMO whitewolf. lizzywizzy se NE pravi ovde.
+        Evangelion = mkHost {
+          hostname = "Evangelion";
+          systemModules = commonModules ++ [
+            ./modules/system/gaming.nix
+            # Host-specifično:
+            ./modules/system/power.nix # baterija - laptop
+            ./modules/system/drivers/nvidia-placeholder.nix
+          ];
+          homeConfigs = {
+            whitewolf = ./home/whitewolf/Evangelion.nix;
+          };
         };
       };
     };

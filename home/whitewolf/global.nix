@@ -5,7 +5,6 @@
   # WhiteWolf - zajednička podešavanja za sve mašine
   # ─────────────────────────────────────────────
   imports = [
-    ../common/plasma-base.nix
     ../common/ghostty.nix
   ];
 
