@@ -27,14 +27,29 @@
   # Povezi svaki host na ruter preko `lan` interfejsa.
   nodes.Stardew.interfaces.lan = {
     network = "home";
-    physicalConnections = [ { node = "router"; interface = "lan"; } ];
+    physicalConnections = [
+      {
+        node = "router";
+        interface = "lan";
+      }
+    ];
   };
   nodes.SolidSnake.interfaces.lan = {
     network = "home";
-    physicalConnections = [ { node = "router"; interface = "lan"; } ];
+    physicalConnections = [
+      {
+        node = "router";
+        interface = "lan";
+      }
+    ];
   };
   nodes.Evangelion.interfaces.lan = {
     network = "home";
-    physicalConnections = [ { node = "router"; interface = "lan"; } ];
+    physicalConnections = [
+      {
+        node = "router";
+        interface = "lan";
+      }
+    ];
   };
 }

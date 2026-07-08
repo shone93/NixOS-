@@ -108,17 +108,61 @@
     # Pokretanje programa (PLAIN Meta + slovo)
     # ─────────────────────────────────────────────
     hotkeys.commands = {
-      "launch-terminal" = { name = "Ghostty"; key = "Meta+Return"; command = "ghostty"; };
-      "launch-yazi" = { name = "Yazi"; key = "Meta+E"; command = "ghostty -e yazi"; };
-      "launch-zed" = { name = "Zed"; key = "Meta+Z"; command = "zeditor"; };
-      "launch-zen" = { name = "Zen Browser"; key = "Meta+B"; command = "zen-beta"; };
-      "launch-steam" = { name = "Steam"; key = "Meta+S"; command = "steam"; };
-      "launch-lutris" = { name = "Lutris"; key = "Meta+L"; command = "lutris"; };
-      "launch-heroic" = { name = "Heroic"; key = "Meta+G"; command = "heroic"; };
-      "launch-obsidian" = { name = "Obsidian"; key = "Meta+O"; command = "obsidian"; };
-      "launch-discord" = { name = "Vesktop"; key = "Meta+D"; command = "vesktop"; };
-      "launch-libreoffice" = { name = "LibreOffice"; key = "Meta+V"; command = "libreoffice"; };
-      "launch-blender" = { name = "Blender"; key = "Meta+C"; command = "blender"; };
+      "launch-terminal" = {
+        name = "Ghostty";
+        key = "Meta+Return";
+        command = "ghostty";
+      };
+      "launch-yazi" = {
+        name = "Yazi";
+        key = "Meta+E";
+        command = "ghostty -e yazi";
+      };
+      "launch-zed" = {
+        name = "Zed";
+        key = "Meta+Z";
+        command = "zeditor";
+      };
+      "launch-zen" = {
+        name = "Zen Browser";
+        key = "Meta+B";
+        command = "zen-beta";
+      };
+      "launch-steam" = {
+        name = "Steam";
+        key = "Meta+S";
+        command = "steam";
+      };
+      "launch-lutris" = {
+        name = "Lutris";
+        key = "Meta+L";
+        command = "lutris";
+      };
+      "launch-heroic" = {
+        name = "Heroic";
+        key = "Meta+G";
+        command = "heroic";
+      };
+      "launch-obsidian" = {
+        name = "Obsidian";
+        key = "Meta+O";
+        command = "obsidian";
+      };
+      "launch-discord" = {
+        name = "Vesktop";
+        key = "Meta+D";
+        command = "vesktop";
+      };
+      "launch-libreoffice" = {
+        name = "LibreOffice";
+        key = "Meta+V";
+        command = "libreoffice";
+      };
+      "launch-blender" = {
+        name = "Blender";
+        key = "Meta+C";
+        command = "blender";
+      };
     };
   };
 

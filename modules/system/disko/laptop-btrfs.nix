@@ -36,22 +36,34 @@
               # @ = root; rola se nazad na prazno pri svakom butu (impermanence).
               "@" = {
                 mountpoint = "/";
-                mountOptions = [ "compress=zstd" "noatime" ];
+                mountOptions = [
+                  "compress=zstd"
+                  "noatime"
+                ];
               };
               # @persist = sve sto mora da prezivi wipe (vidi impermanence.nix).
               "@persist" = {
                 mountpoint = "/persist";
-                mountOptions = [ "compress=zstd" "noatime" ];
+                mountOptions = [
+                  "compress=zstd"
+                  "noatime"
+                ];
               };
               # @nix = nix store; NIKAD se ne brise.
               "@nix" = {
                 mountpoint = "/nix";
-                mountOptions = [ "compress=zstd" "noatime" ];
+                mountOptions = [
+                  "compress=zstd"
+                  "noatime"
+                ];
               };
               # @log = /var/log kao zaseban subvolume da logovi prezive wipe.
               "@log" = {
                 mountpoint = "/var/log";
-                mountOptions = [ "compress=zstd" "noatime" ];
+                mountOptions = [
+                  "compress=zstd"
+                  "noatime"
+                ];
               };
             };
           };
