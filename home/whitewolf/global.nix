@@ -76,12 +76,6 @@
         image_filter = "lanczos3";
       };
     };
-
-    # VSCode Dark Plus tema
-    # NAPOMENA: upstream flavor je u STAROM yazi formatu ($schema, [manager],
-    # `name =` pravila) i yazi 26.5.6 ga odbija ("must be a kebab-cased string").
-    # Patchujemo u novi format: izbaci $schema liniju, [manager]->[mgr],
-    # `{ name =`->`{ url =` (filetype pravila).
     flavors = {
       vscode-dark-plus = pkgs.runCommandLocal "yazi-flavor-vscode-dark-plus-fixed" { } ''
         cp -r ${pkgs.yaziFlavors.vscode-dark-plus} $out

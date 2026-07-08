@@ -2,12 +2,6 @@
   description = "Moja NixOS konfiguracija";
 
   inputs = {
-    # STABILNOST (odluka za čoveka): trenutno prati `nixos-unstable`.
-    # Za manje iznenađenja razmisli o pinovanju na stabilan kanal
-    # `nixos-26.05` (poklapa se sa stateVersion 26.05). Alternativa: ostani
-    # na unstable ali dodaj poseban `nixpkgs-stable` input za cherry-pick.
-    # Preporuka: pinuj `nixos-26.05` za glavne mašine, unstable po želji na testu.
-    # (NIJE menjano automatski — promeni URL sam kad odlučiš.)
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     home-manager = {
