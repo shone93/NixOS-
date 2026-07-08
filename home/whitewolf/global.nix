@@ -21,6 +21,12 @@
     rebuild = "sudo nixos-rebuild switch --flake ~/Documents/nixos-config#$(hostname) && (cd ~/Documents/nixos-config && git add . && git commit -m rebuild && git push)";
     update = "cd ~/Documents/nixos-config && nix flake update";
 
+    # nh (nix-helper) — opcioni, lepši izlaz; NIJE zamena za `rebuild`/`update`.
+    # NH_FLAKE je postavljen u modules/system/apps-common.nix.
+    nhs = "nh os switch";
+    nhb = "nh os boot";
+    nhc = "nh clean all";
+
     # eza kao zamena za ls (ikone, git status, folderi prvi)
     ls = "eza --icons --group-directories-first";
     ll = "eza -l --icons --group-directories-first --git";

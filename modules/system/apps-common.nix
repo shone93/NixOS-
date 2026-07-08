@@ -52,6 +52,7 @@
     gh
 
     # Sistemski alati
+    nh # nix-helper: lepši `nh os switch` (vidi NH_FLAKE nize)
     fastfetch
     btop
     ncdu # disk usage TUI (gde je nestao prostor)
@@ -68,4 +69,9 @@
     noto-fonts
     noto-fonts-color-emoji
   ];
+
+  # nh (nix-helper) cita NH_FLAKE — pa `nh os switch` radi bez extra flagova
+  # i ne mora da mu se prosledjuje putanja do flake-a. Postoji UZ postojece
+  # `rebuild`/`update` aliase (nije zamena) — vidi home/whitewolf/global.nix.
+  environment.sessionVariables.NH_FLAKE = "/home/whitewolf/Documents/nixos-config";
 }
