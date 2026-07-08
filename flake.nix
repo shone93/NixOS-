@@ -44,6 +44,12 @@
     # Impermanence — root se brise pri butu, samo /persist prezivi.
     impermanence.url = "github:nix-community/impermanence";
 
+    # nix-topology — dijagram kucne mreze iz nixosConfigurations.
+    nix-topology = {
+      url = "github:oddlama/nix-topology";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs =
@@ -75,6 +81,8 @@
         ./modules/system/syncthing.nix
         ./modules/system/system-base.nix
         ./modules/system/secrets.nix
+        # nix-topology ekstrakcija (inertna metadata za dijagram mreze).
+        inputs.nix-topology.nixosModules.default
       ];
 
       # Helper funkcija - smanjuje ponavljanje za svaki host.
@@ -190,6 +198,19 @@
           echo "  cd deployment/ && terraform init && terraform plan"
           echo "  NE pokreci 'terraform apply' bez potvrde ciljne masine."
         '';
+      };
+
+      # nix-topology — dijagram sve 3 NixOS masine + ruter.
+      # Build: nix build .#topology.x86_64-linux.config.output
+      topology.${system} = import inputs.nix-topology {
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = [ inputs.nix-topology.overlays.default ];
+        };
+        modules = [
+          { inherit (self) nixosConfigurations; }
+          ./topology.nix
+        ];
       };
     };
 }

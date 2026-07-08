@@ -5,6 +5,7 @@
   nixpkgs.overlays = [
     inputs.yazi-plugins.overlays.default
     inputs.yazi-flavors.overlays.default
+    inputs.nix-topology.overlays.default
   ];
 
   environment.systemPackages = with pkgs; [
