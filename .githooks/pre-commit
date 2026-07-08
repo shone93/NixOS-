@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# pre-commit hook — blokira commit ako `nix flake check` ne prodje.
+#
+# Lokalno PO KLONU: ne postoji automatski na svezem klonu ili posle
+# reinstalacije (Phase 3-5). Omoguci ga rucno sa:
+#   git config core.hooksPath .githooks
+# (dokumentovano u HOSTS.md). Preskoci jednom sa `git commit --no-verify`.
+set -euo pipefail
+
+echo "pre-commit: nix flake check ..."
+if ! nix flake check; then
+  echo "pre-commit: nix flake check NIJE prosao — commit blokiran." >&2
+  echo "  Popravi greske ili preskoci sa: git commit --no-verify" >&2
+  exit 1
+fi
+echo "pre-commit: OK"
