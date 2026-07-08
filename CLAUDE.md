@@ -6,13 +6,17 @@ Flake-based NixOS config. 3 hosts, 2 users, per-user-per-host home-manager.
 
 | Host        | Type    | Users                   | GPU driver             | Status                               |
 |-------------|---------|--------------------------|-------------------------|----------------------------------------|
-| Stardew     | Laptop  | whitewolf + lizzywizzy   | nvidia-laptop (960M)    | REAL — only machine that exists        |
-| SolidSnake  | Desktop | whitewolf + lizzywizzy   | nvidia-desktop (1080)   | Not built yet — scaffold config only   |
-| Evangelion  | Laptop  | whitewolf ONLY           | nvidia-placeholder      | Not built yet — scaffold config only   |
+| Stardew     | Laptop  | whitewolf + lizzywizzy   | nvidia-laptop (960M)    | REAL — only machine that exists. OLD arch (no disko/imperm), intentionally untouched |
+| SolidSnake  | Desktop | whitewolf + lizzywizzy   | nvidia-desktop (1080)   | Scaffold (no hw) — NEW arch: disko+impermanence+snapper, Terraform-managed |
+| Evangelion  | Laptop  | whitewolf ONLY           | nvidia-placeholder      | Scaffold (no hw) — NEW arch: disko+impermanence+snapper, Terraform-managed |
 
 Don't treat SolidSnake/Evangelion as deployable — no real hardware exists for either.
 `nix flake show` and module eval must still pass for them; actual builds won't work
 until real `hardware-configuration.nix` replaces the placeholder.
+
+Full status of the disko/impermanence/Terraform/nix-topology/nix-darwin upgrade
+lives in **HOSTS.md**. Stardew is deliberately still on the OLD architecture
+(no disko/impermanence) until its reinstall is decided.
 
 ## Structure
 
@@ -30,6 +34,23 @@ until real `hardware-configuration.nix` replaces the placeholder.
   - lizzywizzy has NO Evangelion.nix — don't add one unless asked
 - `home/common/` — shared fragments: ghostty.nix, plasma-base.nix, shortcuts script, icons/
 - `home/wallpapers/` — per-user-per-host jpgs, referenced by `<Host>.nix` files, don't read these
+
+## Infra upgrade (deployment / topology / darwin / tooling)
+
+- `deployment/` — nixos-anywhere + Terraform. `systems/<host>.json` per host
+  (SolidSnake, Evangelion; Stardew intentionally excluded). `nix develop .#deploy`.
+  `terraform apply` WIPES the target disk — never without confirming the machine
+  and the disko `device` path. VM test: `nixos-anywhere ... --vm-test`.
+- `topology.nix` + `topology` output — `nix build .#topology.x86_64-linux.config.output`.
+- `modules/system/disko/`, `impermanence.nix`, `impermanence-lizzywizzy.nix`,
+  `btrfs-snapshots.nix` — NEW btrfs architecture, wired into SolidSnake + Evangelion
+  ONLY (not commonModules, not Stardew).
+- `hosts/work-macbook/` + `home/whitewolf/darwin.nix` — nix-darwin
+  (`darwinConfigurations."work-macbook"`, separate track, NOT via mkHost).
+- Tooling: `nh` (nhs/nhb/nhc aliases, alongside rebuild/update), `nix fmt`
+  (nixfmt-rfc-style, skips hardware-configuration.nix), `.githooks/pre-commit`
+  (`nix flake check`; enable per clone with `git config core.hooksPath .githooks`).
+- See HOSTS.md for detailed per-host module sets.
 
 ## Rules
 
