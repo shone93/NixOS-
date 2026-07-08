@@ -35,6 +35,15 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Disko — deklarativno particionisanje (btrfs raspored, modules/system/disko/).
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # Impermanence — root se brise pri butu, samo /persist prezivi.
+    impermanence.url = "github:nix-community/impermanence";
+
   };
 
   outputs =
@@ -111,6 +120,8 @@
             # Host-specifično:
             ./modules/system/power.nix # baterija - samo laptop
             ./modules/system/drivers/nvidia-laptop.nix
+            # NAPOMENA: Stardew NAMERNO nema disko/impermanence/snapper —
+            # jedina realna masina; reinstalacija je odluka za kasnije.
           ];
           homeConfigs = {
             whitewolf = ./home/whitewolf/Stardew.nix;
@@ -127,6 +138,12 @@
             # Host-specifično:
             ./modules/system/apps-desktop.nix # blender, gimp, inkscape
             ./modules/system/drivers/nvidia-desktop.nix
+            # Nova arhitektura: disko + impermanence + snapper.
+            # Stardew NAMERNO nema ove module (vidi napomenu kod Stardew).
+            ./modules/system/disko/desktop-btrfs.nix
+            ./modules/system/impermanence.nix
+            ./modules/system/impermanence-lizzywizzy.nix
+            ./modules/system/btrfs-snapshots.nix
           ];
           homeConfigs = {
             whitewolf = ./home/whitewolf/SolidSnake.nix;
@@ -143,6 +160,10 @@
             # Host-specifično:
             ./modules/system/power.nix # baterija - laptop
             ./modules/system/drivers/nvidia-placeholder.nix
+            # Nova arhitektura: disko + impermanence + snapper. Single-user.
+            ./modules/system/disko/laptop-btrfs.nix
+            ./modules/system/impermanence.nix
+            ./modules/system/btrfs-snapshots.nix
           ];
           homeConfigs = {
             whitewolf = ./home/whitewolf/Evangelion.nix;
