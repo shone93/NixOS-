@@ -50,6 +50,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # nix-darwin — radni Mac (poseban track, sibling od nixosConfigurations).
+    nix-darwin = {
+      url = "github:nix-darwin/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs =
@@ -210,6 +216,24 @@
         modules = [
           { inherit (self) nixosConfigurations; }
           ./topology.nix
+        ];
+      };
+
+      # ───────────── Radni Mac (nix-darwin) ─────────────
+      # Sibling od nixosConfigurations, NAMERNO van mkHost. Scaffold: gradi se
+      # tek na realnom Mac-u (`darwin-rebuild build`); ovde samo evaluira.
+      darwinConfigurations."work-macbook" = inputs.nix-darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
+        specialArgs = { inherit inputs; };
+        modules = [
+          ./hosts/work-macbook/darwin-configuration.nix
+          home-manager.darwinModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = { inherit inputs; };
+            home-manager.users.whitewolf = import ./home/whitewolf/darwin.nix;
+          }
         ];
       };
     };
