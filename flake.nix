@@ -57,6 +57,12 @@
     let
       system = "x86_64-linux";
 
+      # Nixpkgs sa allowUnfree za devShell alate (terraform je BUSL/unfree).
+      pkgs = import nixpkgs {
+        inherit system;
+        config.allowUnfree = true;
+      };
+
       # Moduli koje dele SVI Linux hostovi (osnovni sloj).
       # Host-specifično (lizzywizzy, gaming, power, drajveri, apps-desktop)
       # se dodaje po hostu preko `commonModules ++ [ ... ]`.
@@ -169,6 +175,21 @@
             whitewolf = ./home/whitewolf/Evangelion.nix;
           };
         };
+      };
+
+      # Deploy devShell: terraform + nixos-anywhere za deployment/.
+      # `nix develop .#deploy`, pa `cd deployment && terraform init`.
+      devShells.${system}.deploy = pkgs.mkShell {
+        packages = [
+          pkgs.terraform
+          pkgs.nixos-anywhere
+          pkgs.jq
+        ];
+        shellHook = ''
+          echo "deploy shell — terraform + nixos-anywhere"
+          echo "  cd deployment/ && terraform init && terraform plan"
+          echo "  NE pokreci 'terraform apply' bez potvrde ciljne masine."
+        '';
       };
     };
 }
