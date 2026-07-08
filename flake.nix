@@ -236,5 +236,20 @@
           }
         ];
       };
+
+      # nix fmt — formatira ceo repo (RFC-style nixfmt). Wrapper nalazi sve
+      # .nix fajlove rekurzivno (nixfmt sam ne obilazi direktorijume).
+      # hardware-configuration.nix se NE dira (generise ga nixos-generate-config).
+      formatter.${system} =
+        let
+          p = nixpkgs.legacyPackages.${system};
+        in
+        p.writeShellScriptBin "fmt" ''
+          set -euo pipefail
+          if [ "$#" -eq 0 ]; then set -- .; fi
+          ${p.findutils}/bin/find "$@" -name '*.nix' -type f \
+            -not -name 'hardware-configuration.nix' -print0 \
+            | xargs -0 ${p.nixfmt-rfc-style}/bin/nixfmt
+        '';
     };
 }
