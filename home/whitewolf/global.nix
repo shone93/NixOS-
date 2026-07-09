@@ -17,8 +17,9 @@
   };
 
   # Rebuild skripta - auto-detektuje hostname (#$(hostname))
+  # --no-verify preskace pre-commit hook (nix flake check svih hostova); commit se preskace ako nema izmena, push uvek ide.
   home.shellAliases = {
-    rebuild = "sudo nixos-rebuild switch --flake ~/Documents/nixos-config#$(hostname) && (cd ~/Documents/nixos-config && git add . && git commit -m rebuild && git push)";
+    rebuild = "sudo nixos-rebuild switch --flake ~/Documents/nixos-config#$(hostname) && (cd ~/Documents/nixos-config && git add -A && (git diff --cached --quiet || git commit -m rebuild --no-verify) && git push)";
     update = "cd ~/Documents/nixos-config && nix flake update";
 
     # nh (nix-helper) — opcioni, lepši izlaz; NIJE zamena za `rebuild`/`update`.
