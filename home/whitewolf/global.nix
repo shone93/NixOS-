@@ -71,18 +71,133 @@
       };
     };
     flavors = {
-      vscode-dark-plus = pkgs.runCommandLocal "yazi-flavor-vscode-dark-plus-fixed" { } ''
-        cp -r ${pkgs.yaziFlavors.vscode-dark-plus} $out
-        chmod -R u+w $out
-        sed -i \
-          -e '/schemas\/theme.json/d' \
-          -e 's/^\[manager\]/[mgr]/' \
-          -e 's/{ name =/{ url =/g' \
-          $out/flavor.toml
-      '';
+      # Berserk — rucno pisan flavor, isti hex kao ghostty berserk tema.
+      berserk =
+        let
+          flavorToml = pkgs.writeText "flavor.toml" ''
+            [mgr]
+            cwd = { fg = "#eb3131" }
+            hovered         = { fg = "#fefefe", bg = "#3d3d42" }
+            preview_hovered = { underline = true }
+            find_keyword  = { fg = "#eb3131", bold = true, italic = true, underline = true }
+            find_position = { fg = "#fefefe", bg = "#3d3d42", bold = true }
+            marker_copied   = { fg = "#c0392b", bg = "#c0392b" }
+            marker_cut      = { fg = "#ff4949", bg = "#ff4949" }
+            marker_marked   = { fg = "#eb3131", bg = "#eb3131" }
+            marker_selected = { fg = "#ab2e2e", bg = "#ab2e2e" }
+            tab_active   = { fg = "#fefefe", bg = "#c0392b" }
+            tab_inactive = { fg = "#7a7a7e", bg = "#3d3d42" }
+            tab_width    = 1
+            count_copied   = { fg = "#1b1b1d", bg = "#c0392b" }
+            count_cut      = { fg = "#1b1b1d", bg = "#ff4949" }
+            count_selected = { fg = "#1b1b1d", bg = "#eb3131" }
+            border_symbol = "│"
+            border_style  = { fg = "#7a7a7e" }
+            syntect_theme = "./tmtheme.xml"
+            cursor_symbol = "█"
+            cursor = { fg = "#1b1b1d", bg = "#eb3131" }
+            exe_symbol = ""
+            exe = { fg = "#eb3131", bg = "#1b1b1d" }
+            file_symbol = ""
+            file = { }
+            folder_symbol = ""
+            folder = { fg = "#c0392b", bg = "#1b1b1d" }
+            hidden_symbol = ""
+            hidden = { fg = "#7a7a7e" }
+            link_symbol = ""
+            link = { fg = "#eb3131", bg = "#1b1b1d" }
+            broken_symbol = ""
+            broken = { fg = "#ff4949", bg = "#1b1b1d" }
+            selected = { fg = "#fefefe", bg = "#3d3d42" }
+
+            [status]
+            separator_open  = ""
+            separator_close = ""
+            separator_style = { fg = "#3d3d42", bg = "#3d3d42" }
+            mode_normal = { fg = "#1b1b1d", bg = "#eb3131", bold = true }
+            mode_select = { fg = "#1b1b1d", bg = "#d4956a", bold = true }
+            mode_unset  = { fg = "#1b1b1d", bg = "#ff4949", bold = true }
+            progress_label  = { bold = true }
+            progress_normal = { fg = "#eb3131", bg = "#1b1b1d" }
+            progress_error  = { fg = "#ff4949", bg = "#1b1b1d" }
+            permissions_t = { fg = "#7a7a7e" }
+            permissions_r = { fg = "#d4956a" }
+            permissions_w = { fg = "#eb3131" }
+            permissions_x = { fg = "#c0392b" }
+            permissions_s = { fg = "#7a7a7e" }
+
+            [select]
+            border   = { fg = "#eb3131" }
+            active   = { fg = "#eb3131", bold = true }
+            inactive = {}
+
+            [input]
+            border   = { fg = "#eb3131" }
+            title    = {}
+            value    = {}
+            selected = { reversed = true }
+
+            [completion]
+            border   = { fg = "#eb3131" }
+            active   = { fg = "#fefefe", bg = "#c0392b" }
+            inactive = {}
+            icon_file    = ""
+            icon_folder  = ""
+            icon_command = ""
+
+            [tasks]
+            border  = { fg = "#eb3131" }
+            title   = {}
+            hovered = { underline = true }
+
+            [which]
+            mask            = { bg = "#1b1b1d" }
+            cand            = { fg = "#eb3131" }
+            rest            = { fg = "#7a7a7e" }
+            desc            = { fg = "#fefefe" }
+            separator       = "  "
+            separator_style = { fg = "#7a7a7e" }
+
+            [help]
+            on      = { fg = "#eb3131" }
+            run     = { fg = "#c0392b" }
+            desc    = { fg = "#fefefe" }
+            hovered = { bg = "#3d3d42", bold = true }
+            footer  = { fg = "#fefefe", bg = "#3d3d42" }
+
+            [filetype]
+            rules = [
+                { mime = "image/*", fg = "#d4956a" },
+                { mime = "video/*", fg = "#d4956a" },
+                { mime = "audio/*", fg = "#d4956a" },
+                { mime = "application/zip", fg = "#ff4949" },
+                { mime = "application/gzip", fg = "#ff4949" },
+                { mime = "application/x-tar", fg = "#ff4949" },
+                { mime = "application/x-bzip", fg = "#ff4949" },
+                { mime = "application/x-bzip2", fg = "#ff4949" },
+                { mime = "application/x-7z-compressed", fg = "#ff4949" },
+                { mime = "application/x-rar", fg = "#ff4949" },
+                { mime = "application/pdf", fg = "#eb3131" },
+                { mime = "application/msword", fg = "#eb3131" },
+                { mime = "application/vnd.openxmlformats-officedocument.*", fg = "#eb3131" },
+                { url = "*", fg = "#fefefe" },
+                { url = "*/", fg = "#c0392b" },
+                { url = "*", category = "executable", fg = "#eb3131", bg = "#1b1b1d" },
+                { url = "*/", fg = "#c0392b", bg = "#1b1b1d" },
+                { url = ".*", fg = "#7a7a7e" },
+                { url = "*", category = "link", fg = "#eb3131", bg = "#1b1b1d" },
+                { url = "*", category = "broken", fg = "#ff4949", bg = "#1b1b1d" },
+            ]
+          '';
+        in
+        pkgs.runCommandLocal "yazi-flavor-berserk" { } ''
+          mkdir -p $out
+          cp ${flavorToml} $out/flavor.toml
+          cp ${pkgs.yaziFlavors.vscode-dark-plus}/tmtheme.xml $out/tmtheme.xml
+        '';
     };
     theme.flavor = {
-      dark = "vscode-dark-plus";
+      dark = "berserk";
     };
 
     plugins = with pkgs.yaziPlugins; {
