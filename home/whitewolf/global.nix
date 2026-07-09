@@ -6,6 +6,7 @@
   # ─────────────────────────────────────────────
   imports = [
     ../common/ghostty.nix
+    ../common/starship.nix
   ];
 
   home.stateVersion = "26.05";
