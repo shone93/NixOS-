@@ -1,32 +1,25 @@
 { pkgs, ... }:
 
 {
-  # ─────────────────────────────────────────────
-  # Steam
-  # ─────────────────────────────────────────────
   programs.steam = {
     enable = true;
-    remotePlay.openFirewall = true; # Strimovanje igara sa drugog kompa
-    dedicatedServer.openFirewall = true; # Lokalni serveri
-    gamescopeSession.enable = true; # Valve-ov micro compositor
+    remotePlay.openFirewall = true;
+    dedicatedServer.openFirewall = true;
+    gamescopeSession.enable = true;
     extraCompatPackages = with pkgs; [
       proton-ge-bin
     ];
   };
 
-  # GameMode - boost performansi tokom igranja
   programs.gamemode.enable = true;
 
-  # ─────────────────────────────────────────────
-  # Gaming aplikacije
-  # ─────────────────────────────────────────────
   environment.systemPackages = with pkgs; [
-    heroic # Pokretač za Epic Games i GOG
-    lutris # Menadžer za igre i emulatore
-    mangohud # FPS, temperatura, overlay
-    protonup-qt # GUI za Proton verzije
-    vesktop # Discord optimizovan za Linux
-    winetricks # Wine pomoćni alat
+    heroic
+    lutris
+    mangohud
+    protonup-qt
+    vesktop
+    winetricks
   ];
 
   environment.sessionVariables = {

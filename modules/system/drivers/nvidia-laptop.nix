@@ -1,10 +1,6 @@
 { config, ... }:
 
 {
-  # ─────────────────────────────────────────────
-  # NVIDIA + Intel PRIME (Optimus) - laptop (Stardew)
-  # Lenovo IdeaPad Y700: GTX 960M + Intel HD 530
-  # ─────────────────────────────────────────────
   hardware.graphics = {
     enable = true;
     enable32Bit = true;

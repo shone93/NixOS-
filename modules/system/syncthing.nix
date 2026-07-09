@@ -1,10 +1,6 @@
 { ... }:
 
 {
-  # ─────────────────────────────────────────────
-  # Syncthing - sinhronizacija fajlova između mašina
-  # Koristi se za Obsidian vault, dokumente itd.
-  # ─────────────────────────────────────────────
   services.syncthing = {
     enable = true;
     # TODO: confirm syncthing user for SolidSnake — lizzywizzy je primarni

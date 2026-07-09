@@ -1,7 +1,6 @@
 { ... }:
 
 {
-  # Lizzy na laptopu (Stardew)
   imports = [
     ./global.nix
     ./linux.nix

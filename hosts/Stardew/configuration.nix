@@ -1,12 +1,6 @@
 { ... }:
 
 {
-  # ─────────────────────────────────────────────
-  # Stardew - Laptop (Lenovo IdeaPad Y700)
-  # Host-specifična podešavanja idu ovde.
-  # Zajednički moduli se importuju preko flake.nix.
-  # ─────────────────────────────────────────────
-
   networking.hostName = "Stardew";
 
   # Igre disk (1TB) - po UUID-u tako da ne zavisi od sda/sdb

@@ -1,9 +1,6 @@
 { ... }:
 
 {
-  # ─────────────────────────────────────────────
-  # Power management - SAMO laptop (Stardew)
-  # ─────────────────────────────────────────────
   services.auto-cpufreq = {
     enable = true;
     settings = {
@@ -20,7 +17,6 @@
 
   services.power-profiles-daemon.enable = false; # Konflikt sa auto-cpufreq
 
-  # Bluetooth
   services.blueman.enable = true;
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = false;

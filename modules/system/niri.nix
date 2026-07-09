@@ -1,11 +1,7 @@
 { pkgs, ... }:
 
 {
-  # ─────────────────────────────────────────────
-  # Niri kompozitor - NE importuje se još.
-  # Kada budeš spreman, dodaj u flake.nix systemModules
-  # za host na kome želiš Niri (najpre Stardew).
-  # ─────────────────────────────────────────────
+  # NIJE uvezen nigde jos — aktivisati u flake.nix kad bude spreman.
   programs.niri.enable = true;
 
   xdg.portal = {

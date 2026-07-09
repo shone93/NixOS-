@@ -35,22 +35,18 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Disko — deklarativno particionisanje (btrfs raspored, modules/system/disko/).
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Impermanence — root se brise pri butu, samo /persist prezivi.
     impermanence.url = "github:nix-community/impermanence";
 
-    # nix-topology — dijagram kucne mreze iz nixosConfigurations.
     nix-topology = {
       url = "github:oddlama/nix-topology";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # nix-darwin — radni Mac (poseban track, sibling od nixosConfigurations).
     nix-darwin = {
       url = "github:nix-darwin/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -69,15 +65,11 @@
     let
       system = "x86_64-linux";
 
-      # Nixpkgs sa allowUnfree za devShell alate (terraform je BUSL/unfree).
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
       };
 
-      # Moduli koje dele SVI Linux hostovi (osnovni sloj).
-      # Host-specifično (lizzywizzy, gaming, power, drajveri, apps-desktop)
-      # se dodaje po hostu preko `commonModules ++ [ ... ]`.
       commonModules = [
         ./modules/system/core.nix
         ./modules/system/boot.nix
@@ -91,20 +83,12 @@
         inputs.nix-topology.nixosModules.default
       ];
 
-      # Helper funkcija - smanjuje ponavljanje za svaki host.
-      # Svaki host samo prosledi svoje ime, host-specifične module
-      # i koje home fajlove dobija svaki korisnik na toj mašini.
-      # mkHost: host se opisuje preko podataka (data-driven).
-      # homeConfigs je attrset: korisničko-ime -> putanja do home fajla,
-      # pa host može imati proizvoljan skup korisnika (npr. samo whitewolf).
       mkHost =
         {
           hostname,
           systemModules,
           homeConfigs,
         }:
-        # TODO: darwin — kad se dodaju macOS hostovi, ovde granaj na
-        # inputs.nix-darwin.lib.darwinSystem umesto nixpkgs.lib.nixosSystem.
         nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = { inherit inputs; };
@@ -123,7 +107,6 @@
               home-manager.sharedModules = [
                 plasma-manager.homeModules.plasma-manager
               ];
-              # Svaki korisnik iz homeConfigs dobija svoj home fajl.
               home-manager.users = builtins.mapAttrs (_user: path: import path) homeConfigs;
             }
           ];
@@ -158,8 +141,6 @@
             # Host-specifično:
             ./modules/system/apps-desktop.nix # blender, gimp, inkscape
             ./modules/system/drivers/nvidia-desktop.nix
-            # Nova arhitektura: disko + impermanence + snapper.
-            # Stardew NAMERNO nema ove module (vidi napomenu kod Stardew).
             ./modules/system/disko/desktop-btrfs.nix
             ./modules/system/impermanence.nix
             ./modules/system/impermanence-lizzywizzy.nix
@@ -180,7 +161,6 @@
             # Host-specifično:
             ./modules/system/power.nix # baterija - laptop
             ./modules/system/drivers/nvidia-placeholder.nix
-            # Nova arhitektura: disko + impermanence + snapper. Single-user.
             ./modules/system/disko/laptop-btrfs.nix
             ./modules/system/impermanence.nix
             ./modules/system/btrfs-snapshots.nix
@@ -191,8 +171,6 @@
         };
       };
 
-      # Deploy devShell: terraform + nixos-anywhere za deployment/.
-      # `nix develop .#deploy`, pa `cd deployment && terraform init`.
       devShells.${system}.deploy = pkgs.mkShell {
         packages = [
           pkgs.terraform
@@ -206,8 +184,6 @@
         '';
       };
 
-      # nix-topology — dijagram sve 3 NixOS masine + ruter.
-      # Build: nix build .#topology.x86_64-linux.config.output
       topology.${system} = import inputs.nix-topology {
         pkgs = import nixpkgs {
           inherit system;
@@ -219,9 +195,7 @@
         ];
       };
 
-      # ───────────── Radni Mac (nix-darwin) ─────────────
-      # Sibling od nixosConfigurations, NAMERNO van mkHost. Scaffold: gradi se
-      # tek na realnom Mac-u (`darwin-rebuild build`); ovde samo evaluira.
+      # Scaffold: gradi se na realnom Mac-u; evaluira ali se ne deployuje ovde.
       darwinConfigurations."work-macbook" = inputs.nix-darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         specialArgs = { inherit inputs; };
@@ -237,9 +211,6 @@
         ];
       };
 
-      # nix fmt — formatira ceo repo (RFC-style nixfmt). Wrapper nalazi sve
-      # .nix fajlove rekurzivno (nixfmt sam ne obilazi direktorijume).
-      # hardware-configuration.nix se NE dira (generise ga nixos-generate-config).
       formatter.${system} =
         let
           p = nixpkgs.legacyPackages.${system};

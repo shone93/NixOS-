@@ -23,7 +23,7 @@ lives in **HOSTS.md**. Stardew is deliberately still on the OLD architecture
 - `flake.nix` — entry point, `mkHost` helper, defines hosts + homeConfigs, commonModules list
 - `hosts/<Name>/` — configuration.nix + hardware-configuration.nix, one dir per host
 - `modules/system/` — shared NixOS modules: core, boot, kde, gaming, syncthing, system-base,
-  secrets, power, apps-common, apps-desktop
+  secrets, power, apps-common, apps-desktop; see `modules/system/README.md` for per-module details
   - `modules/system/drivers/` — one GPU module per host (nvidia-laptop, nvidia-desktop, nvidia-placeholder)
   - `modules/system/users/` — per-user account definitions (whitewolf.nix, lizzywizzy.nix)
   - `niri.nix` / `apps-niri.nix` exist but are NOT imported anywhere yet — inactive, don't assume active
@@ -57,7 +57,7 @@ lives in **HOSTS.md**. Stardew is deliberately still on the OLD architecture
 - Never hand-edit hardware-configuration.nix — only via `nixos-generate-config`
 - secrets.yaml is sops-encrypted, safe to commit; secrets.yaml.example is the template only
 - Nothing auto-upgrades or auto-changes running systems (see core.nix `system.autoUpgrade`) — intentional
-- Comments in this repo are in Serbian — match existing style in files you edit
+- Comment style: keep inline `.nix` comments minimal — only short safety/footgun warnings (destructive ops, placeholders, ordering, non-obvious gotchas), written in Serbian to match the code. Architectural/"why" prose lives in Markdown (this file, HOSTS.md, `modules/system/README.md`, `deployment/README.md`) in English — not in inline comments.
 - Skip `flake.lock` unless specifically debugging input versions
 
 ## Adding a new host

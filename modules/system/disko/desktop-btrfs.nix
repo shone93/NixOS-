@@ -1,12 +1,4 @@
-# modules/system/disko/desktop-btrfs.nix
-#
-# btrfs + impermanence disko raspored za DESKTOP (SolidSnake, GTX 1080).
-# Jedan glavni disk za OS. Ako kasnije dodas zaseban "games" disk, dodaj
-# ga kao poseban disko uredjaj ovde (drugi device path).
-#
-# VAZNO: `device` je PLACEHOLDER. Desktop moze imati SATA SSD (/dev/sda)
-# ili NVMe (/dev/nvme0n1) — potvrdi sa `lsblk` pre `terraform apply`.
-# nixos-anywhere regenerise hardware-configuration.nix posle.
+# VAZNO: `device` je PLACEHOLDER — potvrdi sa `lsblk` pre `terraform apply`. Disk se BRISE.
 { inputs, lib, ... }:
 
 {

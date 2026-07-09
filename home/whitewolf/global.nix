@@ -10,36 +10,29 @@
 
   home.stateVersion = "26.05";
 
-  # Podrazumevani editor
   home.sessionVariables = {
     EDITOR = "zeditor";
     VISUAL = "zeditor";
   };
 
-  # Rebuild skripta - auto-detektuje hostname (#$(hostname))
-  # --no-verify preskace pre-commit hook (nix flake check svih hostova); commit se preskace ako nema izmena, push uvek ide.
+  # --no-verify preskace pre-commit hook; push uvek ide.
   home.shellAliases = {
     rebuild = "sudo nixos-rebuild switch --flake ~/Documents/nixos-config#$(hostname) && (cd ~/Documents/nixos-config && git add -A && (git diff --cached --quiet || git commit -m rebuild --no-verify) && git push)";
     update = "cd ~/Documents/nixos-config && nix flake update";
 
-    # nh (nix-helper) — opcioni, lepši izlaz; NIJE zamena za `rebuild`/`update`.
-    # NH_FLAKE je postavljen u modules/system/apps-common.nix.
     nhs = "nh os switch";
     nhb = "nh os boot";
     nhc = "nh clean all";
 
-    # eza kao zamena za ls (ikone, git status, folderi prvi)
     ls = "eza --icons --group-directories-first";
     ll = "eza -l --icons --group-directories-first --git";
     la = "eza -la --icons --group-directories-first --git";
   };
 
-  # 'shortcuts' komanda - cheatsheet svih prečica
   home.packages = [
     (pkgs.writeShellScriptBin "shortcuts" (builtins.readFile ../common/shortcuts))
   ];
 
-  # Default aplikacije
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {
@@ -52,20 +45,13 @@
     };
   };
 
-  # Ghostty - whitewolf dodaje fastfetch na startup (preko zajedničke baze)
   programs.ghostty.settings.command = "bash -c 'fastfetch; exec bash'";
 
-  # ─────────────────────────────────────────────
-  # Zoxide - pametna navigacija po direktorijumima (frecency)
-  # ─────────────────────────────────────────────
   programs.zoxide = {
     enable = true;
     enableBashIntegration = true;
   };
 
-  # ─────────────────────────────────────────────
-  # Yazi - terminal file manager (reproducible, sa pluginovima)
-  # ─────────────────────────────────────────────
   programs.yazi = {
     enable = true;
     enableBashIntegration = true; # 'y' komanda menja folder na izlazu
@@ -98,7 +84,6 @@
       dark = "vscode-dark-plus";
     };
 
-    # Plugins (reproducible preko nix-yazi-plugins)
     plugins = with pkgs.yaziPlugins; {
       inherit
         full-border # čist border oko panela
@@ -168,9 +153,16 @@
     };
   };
 
-  # ─────────────────────────────────────────────
-  # Fastfetch - riced
-  # ─────────────────────────────────────────────
+  # tmux: allow-passthrough je neophodan za yazi image preview u tmux-u.
+  programs.tmux = {
+    enable = true;
+    extraConfig = ''
+      set -g allow-passthrough all
+      set -ga update-environment TERM
+      set -ga update-environment TERM_PROGRAM
+    '';
+  };
+
   programs.fastfetch = {
     enable = true;
     settings = {
@@ -283,7 +275,6 @@
     };
   };
 
-  # Git
   programs.git = {
     enable = true;
     settings = {

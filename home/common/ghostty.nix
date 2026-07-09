@@ -1,12 +1,8 @@
 { ... }:
 
 {
-  # ─────────────────────────────────────────────
-  # Zajednička Ghostty baza (oba korisnika)
-  # ─────────────────────────────────────────────
   programs.ghostty = {
     enable = true;
-    # Instalira custom berserk temu u ~/.config/ghostty/themes/
     themes.berserk = {
       palette = [
         "0=#1b1b1d"

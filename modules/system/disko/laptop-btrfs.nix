@@ -1,11 +1,4 @@
-# modules/system/disko/laptop-btrfs.nix
-#
-# btrfs + impermanence disko raspored za LAPTOPOVE (Evangelion sada;
-# Stardew kasnije AKO/kada se reinstalira). Jedan NVMe disk se pretpostavlja.
-#
-# VAZNO: `device` je PLACEHOLDER. Pre `terraform apply` / nixos-anywhere
-# potvrdi stvarni put diska na ciljnoj masini (`lsblk -dno NAME,SIZE,MODEL`).
-# nixos-anywhere svakako regenerise hardware-configuration.nix posle instalacije.
+# VAZNO: `device` je PLACEHOLDER — potvrdi sa `lsblk` pre `terraform apply`. Disk se BRISE.
 { inputs, lib, ... }:
 
 {
@@ -31,9 +24,8 @@
           size = "100%";
           content = {
             type = "btrfs";
-            extraArgs = [ "-f" ]; # prepisi postojeci fs (fresh install)
+            extraArgs = [ "-f" ];
             subvolumes = {
-              # @ = root; rola se nazad na prazno pri svakom butu (impermanence).
               "@" = {
                 mountpoint = "/";
                 mountOptions = [
@@ -41,7 +33,6 @@
                   "noatime"
                 ];
               };
-              # @persist = sve sto mora da prezivi wipe (vidi impermanence.nix).
               "@persist" = {
                 mountpoint = "/persist";
                 mountOptions = [
@@ -49,7 +40,6 @@
                   "noatime"
                 ];
               };
-              # @nix = nix store; NIKAD se ne brise.
               "@nix" = {
                 mountpoint = "/nix";
                 mountOptions = [
@@ -57,7 +47,6 @@
                   "noatime"
                 ];
               };
-              # @log = /var/log kao zaseban subvolume da logovi prezive wipe.
               "@log" = {
                 mountpoint = "/var/log";
                 mountOptions = [

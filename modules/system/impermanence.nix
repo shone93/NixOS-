@@ -1,30 +1,17 @@
-# modules/system/impermanence.nix
-#
-# Deljeni impermanence sloj: root (@) se brise pri svakom butu, samo
-# eksplicitno perzistirane putanje (ispod) prezive u /persist.
-#
-# VAZNO — NIJE u commonModules namerno. Stardew (jedina realna masina) se
-# NE dira dok korisnik ne odluci; ovaj modul se uvozi SAMO u SolidSnake i
-# Evangelion preko njihovih systemModules u flake.nix.
-#
-# Zavisi od disko rasporeda (disko/*.nix) koji pravi @, @persist, @nix, @log
-# subvolume. Root (@) se pri svakom butu brise i pravi iznova prazan.
+# WIPE-ON-BOOT: root (@) se brise pri svakom butu; samo /persist, /nix, /var/log prezive.
+# NIJE u commonModules — uvozi se SAMO u SolidSnake i Evangelion.
 { inputs, lib, ... }:
 
 {
   imports = [ inputs.impermanence.nixosModules.impermanence ];
 
-  # systemd-based initrd je neophodan za rollback servis ispod.
   boot.initrd.systemd.enable = lib.mkDefault true;
 
-  # Moraju biti montirani rano: impermanence bind-mountuje iz /persist,
-  # journald pise u /var/log (zaseban subvolume).
+  # neededForBoot: impermanence i journald zavise od ovih mountova pre root-a.
   fileSystems."/persist".neededForBoot = true;
   fileSystems."/var/log".neededForBoot = true;
 
-  # Wipe-on-boot: brise @ i pravi svez prazan @ pre nego sto se root montira.
-  # Sve van /persist, /nix, /var/log se gubi pri svakom butu.
-  # Best-effort: validiraj u VM-u (nixos-anywhere --vm-test) pre stvarnog hw.
+  # Wipe-on-boot servis: brise @ i pravi svez prazan @ pre nego sto se root montira.
   boot.initrd.systemd.services.rollback-root = {
     description = "Rollback btrfs root subvolume (@) to a blank snapshot";
     wantedBy = [ "initrd.target" ];
@@ -53,18 +40,11 @@
     '';
   };
 
-  # Perzistencija. Puna /home/whitewolf je namerno perzistirana (najprostiji,
-  # najbezbedniji default). Time su pokriveni i Syncthing kljucevi
-  # (~/.config/syncthing), KDE stanje (kwallet, plasma*), i ostali dotfajlovi.
   # SSH host kljucevi MORAJU da prezive — sops-nix ih koristi za dekripciju.
-  # /home/lizzywizzy se dodaje zasebno (impermanence-lizzywizzy.nix) samo gde
-  # lizzywizzy postoji (SolidSnake). Evangelion je single-user.
   environment.persistence."/persist" = {
     hideMounts = true;
     directories = [
-      # /var/lib/nixos cuva dodeljene uid/gid — bez perzistiranja bi se
-      # korisnicima (whitewolf, lizzywizzy) menjali uid-ovi pri svakom butu
-      # i pokvarilo bi vlasnistvo nad perzistiranim /home fajlovima.
+      # /var/lib/nixos: bez ovoga uid/gid se menjaju pri svakom butu i kvare vlasnistvo fajlova.
       "/var/lib/nixos"
       "/etc/NetworkManager/system-connections"
       "/var/lib/bluetooth"

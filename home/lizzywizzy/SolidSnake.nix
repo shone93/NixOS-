@@ -1,7 +1,6 @@
 { ... }:
 
 {
-  # Lizzy na desktopu (SolidSnake)
   imports = [
     ./global.nix
     ./linux.nix

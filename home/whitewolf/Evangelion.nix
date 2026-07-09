@@ -1,7 +1,6 @@
 { ... }:
 
 {
-  # WhiteWolf na novom laptopu (Evangelion) - jedini korisnik.
   imports = [
     ./global.nix
     ./linux.nix

@@ -1,12 +1,3 @@
-# topology.nix
-#
-# Deklarativni opis kucne mreze za nix-topology. Cvorovi za Stardew,
-# SolidSnake i Evangelion se auto-ekstraktuju iz nixosConfigurations
-# (nix-topology.nixosModules.default je u commonModules); ovde dodajemo
-# ruter i povezujemo hostove na LAN.
-#
-# Build: nix build .#topology.x86_64-linux.config.output
-# Napomena: konekcije/interfejsi su best-effort — doteraj posle prvog builda.
 { config, lib, ... }:
 
 {
@@ -24,7 +15,6 @@
     };
   };
 
-  # Povezi svaki host na ruter preko `lan` interfejsa.
   nodes.Stardew.interfaces.lan = {
     network = "home";
     physicalConnections = [

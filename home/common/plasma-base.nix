@@ -1,9 +1,6 @@
 { pkgs, ... }:
 
 {
-  # ─────────────────────────────────────────────
-  # Zajednička KDE Plasma podešavanja (oba korisnika)
-  # ─────────────────────────────────────────────
   programs.plasma = {
     enable = true;
 
@@ -104,9 +101,6 @@
       "ksmserver"."Lock Session" = "Meta+Escape";
     };
 
-    # ─────────────────────────────────────────────
-    # Pokretanje programa (PLAIN Meta + slovo)
-    # ─────────────────────────────────────────────
     hotkeys.commands = {
       "launch-terminal" = {
         name = "Ghostty";
