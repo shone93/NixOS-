@@ -220,7 +220,7 @@
           if [ "$#" -eq 0 ]; then set -- .; fi
           ${p.findutils}/bin/find "$@" -name '*.nix' -type f \
             -not -name 'hardware-configuration.nix' -print0 \
-            | xargs -0 ${p.nixfmt-rfc-style}/bin/nixfmt
+            | xargs -0 ${p.nixfmt}/bin/nixfmt
         '';
     };
 }
