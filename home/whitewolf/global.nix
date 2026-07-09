@@ -283,12 +283,10 @@
     enable = true;
     settings = {
       logo = {
-        source = "nixos";
-        type = "builtin";
-        # crveni dvotonski snowflake (berserk paleta preko ghostty remap-a).
+        source = ../common/fastfetch-logo.txt;
+        type = "file";
         color = {
           "1" = "red";
-          "2" = "magenta";
         };
         padding = {
           top = 1;
