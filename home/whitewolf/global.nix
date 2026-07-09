@@ -283,10 +283,12 @@
     enable = true;
     settings = {
       logo = {
-        source = "~/.config/fastfetch/logo.txt";
-        type = "file";
+        source = "nixos";
+        type = "builtin";
+        # crveni dvotonski snowflake (berserk paleta preko ghostty remap-a).
         color = {
           "1" = "red";
+          "2" = "magenta";
         };
         padding = {
           top = 1;
@@ -308,15 +310,21 @@
         {
           type = "title";
           color = {
-            user = "magenta";
+            user = "red";
             at = "white";
-            host = "blue";
+            host = "magenta";
           };
         }
         "break"
         {
+          type = "custom";
+          key = "▎ System";
+          keyColor = "1;31";
+          format = "";
+        }
+        {
           type = "os";
-          key = "  󰣛 OS";
+          key = "  󱄅 OS";
           keyColor = "blue";
         }
         {
@@ -355,6 +363,12 @@
           keyColor = "yellow";
         }
         "break"
+        {
+          type = "custom";
+          key = "▎ Hardware";
+          keyColor = "1;31";
+          format = "";
+        }
         {
           type = "cpu";
           key = "  󰻠 CPU";
