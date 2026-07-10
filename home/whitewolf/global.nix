@@ -167,32 +167,19 @@
 
             [filetype]
             rules = [
-                { mime = "image/*", fg = "#d4956a" },
-                { mime = "video/*", fg = "#d4956a" },
-                { mime = "audio/*", fg = "#d4956a" },
-                { mime = "application/zip", fg = "#ff4949" },
-                { mime = "application/gzip", fg = "#ff4949" },
-                { mime = "application/x-tar", fg = "#ff4949" },
-                { mime = "application/x-bzip", fg = "#ff4949" },
-                { mime = "application/x-bzip2", fg = "#ff4949" },
-                { mime = "application/x-7z-compressed", fg = "#ff4949" },
-                { mime = "application/x-rar", fg = "#ff4949" },
-                { mime = "application/pdf", fg = "#eb3131" },
-                { mime = "application/msword", fg = "#eb3131" },
-                { mime = "application/vnd.openxmlformats-officedocument.*", fg = "#eb3131" },
                 { url = "*", fg = "#fefefe" },
-                { url = "*/", fg = "#c0392b" },
-                { url = "*", category = "executable", fg = "#eb3131", bg = "#1b1b1d" },
-                { url = "*/", fg = "#c0392b", bg = "#1b1b1d" },
+                { url = "*/", fg = "#fefefe" },
                 { url = ".*", fg = "#7a7a7e" },
-                { url = "*", category = "link", fg = "#eb3131", bg = "#1b1b1d" },
-                { url = "*", category = "broken", fg = "#ff4949", bg = "#1b1b1d" },
             ]
+          '';
+          # yazi default ikonice, sve prebojene u berserk crvenu (glifovi ostaju).
+          iconsRed = pkgs.runCommandLocal "yazi-icons-red.toml" { } ''
+            sed -E 's/fg = "#[0-9a-fA-F]{3,8}"/fg = "#eb3131"/g' ${../common/yazi-icons.toml} > $out
           '';
         in
         pkgs.runCommandLocal "yazi-flavor-berserk" { } ''
           mkdir -p $out
-          cp ${flavorToml} $out/flavor.toml
+          cat ${flavorToml} ${iconsRed} > $out/flavor.toml
           cp ${pkgs.yaziFlavors.vscode-dark-plus}/tmtheme.xml $out/tmtheme.xml
         '';
     };
