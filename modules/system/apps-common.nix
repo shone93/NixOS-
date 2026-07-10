@@ -8,6 +8,13 @@
     inputs.nix-topology.overlays.default
   ];
 
+  # Logitech (G915 tastatura, G502 X Plus mis): solaar GUI + logitech-udev-rules
+  # za pristup uredjajima (baterija, DPI, dugmad). Bare paket nema udev pravila.
+  hardware.logitech.wireless = {
+    enable = true;
+    enableGraphical = true; # povlaci pkgs.solaar
+  };
+
   environment.systemPackages = with pkgs; [
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
 

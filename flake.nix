@@ -52,6 +52,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    arctis-sound-manager = {
+      # Flake je u nix/ poddirektorijumu upstream repo-a; koristi svoj pinovan
+      # nixpkgs (25.11) — NAMERNO bez follows, jer je nas sistem na unstable.
+      url = "github:loteran/Arctis-Sound-Manager?dir=nix";
+    };
+
   };
 
   outputs =
@@ -123,6 +129,7 @@
             # Host-specifično:
             ./modules/system/power.nix # baterija - samo laptop
             ./modules/system/drivers/nvidia-laptop.nix
+            ./modules/system/arctis.nix # Arctis Nova Pro Omni slusalice
             # NAPOMENA: Stardew NAMERNO nema disko/impermanence/snapper —
             # jedina realna masina; reinstalacija je odluka za kasnije.
           ];
