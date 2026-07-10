@@ -124,7 +124,6 @@
         Stardew = mkHost {
           hostname = "Stardew";
           systemModules = commonModules ++ [
-            ./modules/system/users/lizzywizzy.nix
             ./modules/system/gaming.nix
             # Host-specifično:
             ./modules/system/power.nix # baterija - samo laptop
@@ -135,7 +134,6 @@
           ];
           homeConfigs = {
             whitewolf = ./home/whitewolf/Stardew.nix;
-            lizzywizzy = ./home/lizzywizzy/Stardew.nix;
           };
         };
 
@@ -146,6 +144,7 @@
             ./modules/system/users/lizzywizzy.nix
             ./modules/system/gaming.nix
             # Host-specifično:
+            ./modules/system/ssh.nix
             ./modules/system/drivers/nvidia-desktop.nix
             ./modules/system/disko/desktop-btrfs.nix
             ./modules/system/impermanence.nix
@@ -165,6 +164,7 @@
           systemModules = commonModules ++ [
             ./modules/system/gaming.nix
             # Host-specifično:
+            ./modules/system/ssh.nix
             ./modules/system/power.nix # baterija - laptop
             ./modules/system/apps-desktop.nix # blender, gimp, inkscape — rendering na primarnoj masini
             ./modules/system/drivers/nvidia-placeholder.nix

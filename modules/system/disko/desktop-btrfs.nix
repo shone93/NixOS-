@@ -22,37 +22,46 @@
         };
         root = {
           size = "100%";
+          # Lozinka se unosi interaktivno pri svakom butu; nema mehanizma za
+          # automatsko otkljucavanje bez korisnicke intervencije.
+          # Desktop: LUKS je opcionalan (masina nije mobilna), ali se cuva
+          # identican layout sa laptop-btrfs.nix radi konzistentnosti.
           content = {
-            type = "btrfs";
-            extraArgs = [ "-f" ];
-            subvolumes = {
-              "@" = {
-                mountpoint = "/";
-                mountOptions = [
-                  "compress=zstd"
-                  "noatime"
-                ];
-              };
-              "@persist" = {
-                mountpoint = "/persist";
-                mountOptions = [
-                  "compress=zstd"
-                  "noatime"
-                ];
-              };
-              "@nix" = {
-                mountpoint = "/nix";
-                mountOptions = [
-                  "compress=zstd"
-                  "noatime"
-                ];
-              };
-              "@log" = {
-                mountpoint = "/var/log";
-                mountOptions = [
-                  "compress=zstd"
-                  "noatime"
-                ];
+            type = "luks";
+            name = "crypted";
+            settings.allowDiscards = true; # SSD trim kroz LUKS
+            content = {
+              type = "btrfs";
+              extraArgs = [ "-f" ];
+              subvolumes = {
+                "@" = {
+                  mountpoint = "/";
+                  mountOptions = [
+                    "compress=zstd"
+                    "noatime"
+                  ];
+                };
+                "@persist" = {
+                  mountpoint = "/persist";
+                  mountOptions = [
+                    "compress=zstd"
+                    "noatime"
+                  ];
+                };
+                "@nix" = {
+                  mountpoint = "/nix";
+                  mountOptions = [
+                    "compress=zstd"
+                    "noatime"
+                  ];
+                };
+                "@log" = {
+                  mountpoint = "/var/log";
+                  mountOptions = [
+                    "compress=zstd"
+                    "noatime"
+                  ];
+                };
               };
             };
           };

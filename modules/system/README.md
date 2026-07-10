@@ -6,7 +6,7 @@ This file complements [CLAUDE.md](../../CLAUDE.md) (architecture index) and [HOS
 
 | File | Purpose |
 |------|---------|
-| `core.nix` | Nix daemon settings, flake experimental features, GC, nixpkgs allowUnfree, autoUpgrade |
+| `core.nix` | Nix daemon settings, flake experimental features, GC, nixpkgs allowUnfree |
 | `boot.nix` | systemd-boot, EFI, quiet boot kernel params |
 | `kde.nix` | KDE Plasma 6 + SDDM, ark, debloat exclusions |
 | `gaming.nix` | Steam (Proton-GE, gamescope), gamemode, heroic/lutris/mangohud/vesktop |
@@ -21,6 +21,7 @@ This file complements [CLAUDE.md](../../CLAUDE.md) (architecture index) and [HOS
 | `impermanence.nix` | Wipe-on-boot rollback service + persistence declarations |
 | `impermanence-lizzywizzy.nix` | Adds /home/lizzywizzy to persist — SolidSnake only |
 | `btrfs-snapshots.nix` | Snapper timeline snapshots over /persist — SolidSnake and Evangelion |
+| `ssh.nix` | OpenSSH service — SolidSnake and Evangelion only (required for nixos-anywhere deploy) |
 
 ### Subdirectories
 

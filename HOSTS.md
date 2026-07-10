@@ -7,7 +7,7 @@ Za strukturu repo-a i pravila vidi CLAUDE.md.
 
 | Host        | Tip     | Korisnici              | Arhitektura                                  | Status |
 |-------------|---------|------------------------|----------------------------------------------|--------|
-| Stardew     | Laptop  | whitewolf + lizzywizzy | STARA (postojeca), BEZ disko/impermanence    | REALNA masina; jedina koja fizicki postoji. NAMERNO netaknuta — reinstalacija je odluka za kasnije. |
+| Stardew     | Laptop  | whitewolf ONLY         | STARA (postojeca), BEZ disko/impermanence    | REALNA masina; jedina koja fizicki postoji. NAMERNO netaknuta — reinstalacija je odluka za kasnije. |
 | SolidSnake  | Desktop | whitewolf + lizzywizzy | NOVA: btrfs + disko + impermanence + snapper | Scaffold — nema hardvera. Evaluira u toplevel; instalira se preko deployment/ kad bude masine. |
 | Evangelion  | Laptop  | whitewolf ONLY         | NOVA: btrfs + disko + impermanence + snapper | Scaffold — nema hardvera. Single-user. |
 
@@ -65,10 +65,10 @@ Stardew NEMA nijedan od ova tri modula (namerno).
 commonModules (svi hostovi): core, boot, kde, users/whitewolf, apps-common,
 syncthing, system-base, secrets, nix-topology ekstrakcija.
 
-- Stardew: + users/lizzywizzy, gaming, power, drivers/nvidia-laptop
-- SolidSnake: + users/lizzywizzy, gaming, drivers/nvidia-desktop,
+- Stardew: + gaming, power, drivers/nvidia-laptop
+- SolidSnake: + users/lizzywizzy, gaming, ssh, drivers/nvidia-desktop,
   disko/desktop-btrfs, impermanence, impermanence-lizzywizzy, btrfs-snapshots
-- Evangelion: + gaming, power, apps-desktop, drivers/nvidia-placeholder,
+- Evangelion: + gaming, ssh, power, apps-desktop, drivers/nvidia-placeholder,
   disko/laptop-btrfs, impermanence, btrfs-snapshots
 
 SolidSnake je sada gaming-fokusiran (lizzywizzy primarni korisnik); Evangelion je

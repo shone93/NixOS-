@@ -28,18 +28,5 @@
     options = "--delete-older-than 7d";
   };
 
-  system.autoUpgrade = {
-    enable = true;
-    flake = "~/Documents/nixos-config";
-    flags = [
-      "--update-input"
-      "nixpkgs"
-    ];
-    dates = "weekly";
-    allowReboot = false;
-  };
-
   nixpkgs.config.allowUnfree = true;
-
-  system.stateVersion = "26.05";
 }

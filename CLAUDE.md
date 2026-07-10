@@ -6,7 +6,7 @@ Flake-based NixOS config. 3 hosts, 2 users, per-user-per-host home-manager.
 
 | Host        | Type    | Users                   | GPU driver             | Status                               |
 |-------------|---------|--------------------------|-------------------------|----------------------------------------|
-| Stardew     | Laptop  | whitewolf + lizzywizzy   | nvidia-laptop (960M)    | REAL — only machine that exists. OLD arch (no disko/imperm), intentionally untouched |
+| Stardew     | Laptop  | whitewolf ONLY           | nvidia-laptop (960M)    | REAL — only machine that exists. OLD arch (no disko/imperm), intentionally untouched |
 | SolidSnake  | Desktop | whitewolf + lizzywizzy   | nvidia-desktop (1080)   | Scaffold (no hw) — NEW arch: disko+impermanence+snapper, Terraform-managed |
 | Evangelion  | Laptop  | whitewolf ONLY           | nvidia-placeholder      | Scaffold (no hw) — NEW arch: disko+impermanence+snapper, Terraform-managed |
 
@@ -56,7 +56,7 @@ lives in **HOSTS.md**. Stardew is deliberately still on the OLD architecture
 
 - Never hand-edit hardware-configuration.nix — only via `nixos-generate-config`
 - secrets.yaml is sops-encrypted, safe to commit; secrets.yaml.example is the template only
-- Nothing auto-upgrades or auto-changes running systems (see core.nix `system.autoUpgrade`) — intentional
+- Nothing auto-upgrades or auto-changes running systems — intentional (autoUpgrade block removed from core.nix)
 - Comment style: keep inline `.nix` comments minimal — only short safety/footgun warnings (destructive ops, placeholders, ordering, non-obvious gotchas), written in Serbian to match the code. Architectural/"why" prose lives in Markdown (this file, HOSTS.md, `modules/system/README.md`, `deployment/README.md`) in English — not in inline comments.
 - Skip `flake.lock` unless specifically debugging input versions
 

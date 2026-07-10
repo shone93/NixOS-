@@ -38,6 +38,9 @@
 
   services.fstrim.enable = true;
 
+  # Eksplicitno — podrazumevano je vec true, ali dokumentujemo nameru.
+  networking.firewall.enable = true;
+
   # Registruje fish u /etc/shells da bi mogao biti login shell (ne namece ga nikome).
   programs.fish.enable = true;
 }

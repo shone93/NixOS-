@@ -12,4 +12,7 @@
       "nofail"
     ];
   };
+
+  # ne menjaj bez migracije
+  system.stateVersion = "26.05";
 }
