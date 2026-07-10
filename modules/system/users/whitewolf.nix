@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   users.users.whitewolf = {
@@ -8,6 +8,7 @@
       "networkmanager"
       "wheel"
     ];
+    shell = pkgs.fish;
   };
   users.groups.whitewolf = { };
 }

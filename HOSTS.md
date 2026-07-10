@@ -66,7 +66,10 @@ commonModules (svi hostovi): core, boot, kde, users/whitewolf, apps-common,
 syncthing, system-base, secrets, nix-topology ekstrakcija.
 
 - Stardew: + users/lizzywizzy, gaming, power, drivers/nvidia-laptop
-- SolidSnake: + users/lizzywizzy, gaming, apps-desktop, drivers/nvidia-desktop,
+- SolidSnake: + users/lizzywizzy, gaming, drivers/nvidia-desktop,
   disko/desktop-btrfs, impermanence, impermanence-lizzywizzy, btrfs-snapshots
-- Evangelion: + gaming, power, drivers/nvidia-placeholder,
+- Evangelion: + gaming, power, apps-desktop, drivers/nvidia-placeholder,
   disko/laptop-btrfs, impermanence, btrfs-snapshots
+
+SolidSnake je sada gaming-fokusiran (lizzywizzy primarni korisnik); Evangelion je
+primarna masina za rendering/kreativni rad (apps-desktop + blender).

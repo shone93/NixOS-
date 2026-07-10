@@ -15,7 +15,7 @@ This file complements [CLAUDE.md](../../CLAUDE.md) (architecture index) and [HOS
 | `secrets.nix` | sops-nix import + conditional activation when secrets.yaml exists |
 | `power.nix` | auto-cpufreq, bluetooth, wifi powersave off — laptops only |
 | `apps-common.nix` | Shared system packages for all hosts: editors, browsers, terminal tools, fonts, NH_FLAKE |
-| `apps-desktop.nix` | Heavy creative apps for desktop only: blender, gimp, inkscape, krita, godot |
+| `apps-desktop.nix` | Creative/rendering app bundle: blender, gimp, inkscape, krita, godot — now used by Evangelion |
 | `apps-niri.nix` | Niri-specific packages — **not imported anywhere yet** |
 | `niri.nix` | Niri compositor module — **not imported anywhere yet** |
 | `impermanence.nix` | Wipe-on-boot rollback service + persistence declarations |

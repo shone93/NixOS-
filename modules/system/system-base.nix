@@ -37,4 +37,7 @@
   '';
 
   services.fstrim.enable = true;
+
+  # Registruje fish u /etc/shells da bi mogao biti login shell (ne namece ga nikome).
+  programs.fish.enable = true;
 }

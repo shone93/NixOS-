@@ -46,7 +46,7 @@
     };
   };
 
-  programs.ghostty.settings.command = "bash -c 'fastfetch; exec bash'";
+  programs.ghostty.settings.command = "fish -c 'fastfetch; exec fish'";
 
   programs.zoxide = {
     enable = true;
@@ -414,4 +414,5 @@
   };
 
   programs.bash.enable = true;
+  programs.fish.enable = true;
 }

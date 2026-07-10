@@ -139,7 +139,6 @@
             ./modules/system/users/lizzywizzy.nix
             ./modules/system/gaming.nix
             # Host-specifično:
-            ./modules/system/apps-desktop.nix # blender, gimp, inkscape
             ./modules/system/drivers/nvidia-desktop.nix
             ./modules/system/disko/desktop-btrfs.nix
             ./modules/system/impermanence.nix
@@ -160,6 +159,7 @@
             ./modules/system/gaming.nix
             # Host-specifično:
             ./modules/system/power.nix # baterija - laptop
+            ./modules/system/apps-desktop.nix # blender, gimp, inkscape — rendering na primarnoj masini
             ./modules/system/drivers/nvidia-placeholder.nix
             ./modules/system/disko/laptop-btrfs.nix
             ./modules/system/impermanence.nix
