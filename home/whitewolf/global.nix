@@ -16,9 +16,7 @@
     VISUAL = "zeditor";
   };
 
-  # --no-verify preskace pre-commit hook; push uvek ide.
   home.shellAliases = {
-    rebuild = "sudo nixos-rebuild switch --flake ~/Documents/nixos-config#$(hostname) && (cd ~/Documents/nixos-config && git add -A && (git diff --cached --quiet || git commit -m rebuild --no-verify) && git push)";
     update = "cd ~/Documents/nixos-config && nix flake update";
 
     nhs = "nh os switch";
@@ -32,6 +30,15 @@
 
   home.packages = [
     (pkgs.writeShellScriptBin "shortcuts" (builtins.readFile ../common/shortcuts))
+    # --no-verify preskace pre-commit hook; push uvek ide.
+    (pkgs.writeShellScriptBin "rebuild" ''
+      set -e
+      sudo nixos-rebuild switch --flake ~/Documents/nixos-config#"$(hostname)"
+      cd ~/Documents/nixos-config
+      git add -A
+      git diff --cached --quiet || git commit -m rebuild --no-verify
+      git push
+    '')
   ];
 
   xdg.mimeApps = {
