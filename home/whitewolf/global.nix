@@ -404,6 +404,10 @@
       user.email = "nenadcvijanovic93@gmail.com";
       init.defaultBranch = "main";
       push.autoSetupRemote = true;
+      # gh kao git credential helper preko PATH-a — NE pinuj /nix/store putanju
+      # (GC obrise staru gh verziju i git login pukne). "gh" se resava iz PATH-a u runtime-u.
+      credential."https://github.com".helper = "!gh auth git-credential";
+      credential."https://gist.github.com".helper = "!gh auth git-credential";
     };
   };
 
