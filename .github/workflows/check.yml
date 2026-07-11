@@ -1,0 +1,33 @@
+name: check
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  flake-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+      - run: nix flake check --print-build-logs
+
+  build-hosts:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        host: [ Stardew, SolidSnake, Evangelion ]
+    steps:
+      - uses: actions/checkout@v4
+      # Full NixOS closures are large; free up runner disk before building.
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/share/boost "$AGENT_TOOLSDIRECTORY"
+      - uses: DeterminateSystems/nix-installer-action@main
+      # Scaffold hosts (SolidSnake, Evangelion) build against placeholder
+      # hardware-configuration.nix — this catches module-eval/build breakage,
+      # not real-hardware correctness.
+      - run: nix build --print-build-logs ".#nixosConfigurations.${{ matrix.host }}.config.system.build.toplevel"

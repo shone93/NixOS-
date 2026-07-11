@@ -38,6 +38,12 @@
 
   services.fstrim.enable = true;
 
+  # SSD/NVMe SMART monitoring — jeftino, hvata otkaz diska rano.
+  services.smartd.enable = true;
+
+  # Firmware update daemon (fwupdmgr).
+  services.fwupd.enable = true;
+
   # Eksplicitno — podrazumevano je vec true, ali dokumentujemo nameru.
   networking.firewall.enable = true;
 

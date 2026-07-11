@@ -129,6 +129,7 @@
             ./modules/system/power.nix # baterija - samo laptop
             ./modules/system/drivers/nvidia-laptop.nix
             ./modules/system/arctis.nix # Arctis Nova Pro Omni slusalice
+            ./modules/system/backup.nix # restic off-disk backup — jedina masina sa realnim podacima
             # NAPOMENA: Stardew NAMERNO nema disko/impermanence/snapper —
             # jedina realna masina; reinstalacija je odluka za kasnije.
           ];

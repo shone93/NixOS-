@@ -52,6 +52,8 @@
     gh
 
     nh # nix-helper: lepši `nh os switch` (vidi NH_FLAKE nize)
+    nix-index # nix-locate: koji paket sadrzi fajl
+    comma # `, <program>` pokrece paket bez instalacije (koristi nix-index bazu)
     fastfetch
     btop
     ncdu # disk usage TUI (gde je nestao prostor)

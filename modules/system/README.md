@@ -22,6 +22,7 @@ This file complements [CLAUDE.md](../../CLAUDE.md) (architecture index) and [HOS
 | `impermanence-lizzywizzy.nix` | Adds /home/lizzywizzy to persist — SolidSnake only |
 | `btrfs-snapshots.nix` | Snapper timeline snapshots over /persist — SolidSnake and Evangelion |
 | `ssh.nix` | OpenSSH service — SolidSnake and Evangelion only (required for nixos-anywhere deploy) |
+| `backup.nix` | restic daily backup of `/home/whitewolf` to an off-disk repo — Stardew only. `repository` + sops secrets are `REPLACE` placeholders until a backend is chosen. |
 
 ### Subdirectories
 
@@ -61,4 +62,5 @@ Both `disko/desktop-btrfs.nix` and `disko/laptop-btrfs.nix` declare a single btr
 - `secrets.yaml` is sops-encrypted and **safe to commit** to the repository.
 - `secrets.yaml.example` in the repo root is the template — it contains no real secrets.
 - `secrets.nix` is active on all hosts (via `commonModules`) but the sops config block is guarded by `lib.mkIf (builtins.pathExists ../../secrets.yaml)` so `nix flake check` passes even without a real secrets file.
-- New-machine onboarding steps (generating age keys, updating `.sops.yaml`, re-encrypting) are documented in [CLAUDE.md](../../CLAUDE.md) under **Sops — new machine onboarding**.
+- User passwords: `whitewolf-password` (all hosts) and `lizzywizzy-password` (Stardew/SolidSnake only) are `neededForUsers` sops secrets holding `mkpasswd -m sha-512` hashes. `users/whitewolf.nix` and `users/lizzywizzy.nix` wire them via `hashedPasswordFile`, but only where `users.mutableUsers = false` (SolidSnake + Evangelion, set per-host) — so Stardew keeps mutable `passwd`. If `secrets.yaml` is missing, the impermanence hosts fail closed (account locked, not passwordless).
+- New-machine onboarding steps (age keys, updating `.sops.yaml`, password hashes, re-encrypting) are documented in [CLAUDE.md](../../CLAUDE.md) under **Sops — new machine onboarding** and, copy-paste form, in [deployment/README.md](../../deployment/README.md).
