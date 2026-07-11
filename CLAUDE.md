@@ -60,6 +60,33 @@ lives in **HOSTS.md**. Stardew is deliberately still on the OLD architecture
 - Comment style: keep inline `.nix` comments minimal — only short safety/footgun warnings (destructive ops, placeholders, ordering, non-obvious gotchas), written in Serbian to match the code. Architectural/"why" prose lives in Markdown (this file, HOSTS.md, `modules/system/README.md`, `deployment/README.md`) in English — not in inline comments.
 - Skip `flake.lock` unless specifically debugging input versions
 
+## Wallust dynamic theming (Stardew / whitewolf)
+
+Opt-in wallpaper-driven color theming, scoped to Stardew + whitewolf only.
+Trigger: `set-wallpaper-mood [path]` (or `Meta+Shift+W` to pick via file dialog).
+It sets the wallpaper, runs `wallust run <image>` to regenerate palettes, and
+applies the KDE colorscheme live via `plasma-apply-colorscheme Wallust` — no
+session restart needed (confirmed working). New Ghostty/Yazi windows pick up the
+new colors; already-open ones must be restarted.
+
+Config lives in `home/whitewolf/theming.nix` (wallust.toml + templates, managed by
+home-manager as read-only store symlinks — that's fine, only the *generated output*
+files must be mutable).
+
+Include-stub pattern (avoids the read-only-symlink problem): home-manager writes a
+stub that includes a writable file wallust owns.
+- Ghostty: `config-file = ?~/.cache/wallust/ghostty-colors` (the `?` = optional; when
+  the file is absent the static berserk theme stays the default).
+- Yazi: flavor switched to `wallust`; `home.activation` seeds
+  `~/.config/yazi/flavors/wallust.yazi/flavor.toml` (+ tmtheme.xml) from the berserk
+  colors if absent, and wallust overwrites it on trigger.
+- KDE: wallust writes `~/.local/share/color-schemes/Wallust.colors` (not managed by
+  home-manager, so writable).
+
+Rollback: delete `~/.cache/wallust/ghostty-colors` and
+`~/.config/yazi/flavors/wallust.yazi/flavor.toml`, restart the apps. The static
+berserk theme remains the default until `set-wallpaper-mood` is explicitly run.
+
 ## Adding a new host
 
 1. `hosts/<Name>/configuration.nix` + `hardware-configuration.nix` (real or placeholder)

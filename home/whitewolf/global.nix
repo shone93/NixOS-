@@ -7,6 +7,7 @@
   imports = [
     ../common/ghostty.nix
     ../common/starship.nix
+    ./theming.nix
   ];
 
   home.stateVersion = "26.05";
@@ -191,7 +192,7 @@
         '';
     };
     theme.flavor = {
-      dark = "berserk";
+      dark = "wallust";
     };
 
     plugins = with pkgs.yaziPlugins; {

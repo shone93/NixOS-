@@ -32,6 +32,8 @@
       theme = "berserk";
       font-size = 12;
       background-opacity = 0.85;
+      # wallust boje — prisutne samo ako je run set-wallpaper-mood bio pokrenut
+      "config-file" = "?~/.cache/wallust/ghostty-colors";
     };
   };
 }

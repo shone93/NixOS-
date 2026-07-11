@@ -157,6 +157,11 @@
         key = "Meta+C";
         command = "blender";
       };
+      "set-wallpaper-mood" = {
+        name = "Wallpaper mood (wallust)";
+        key = "Meta+Shift+W";
+        command = "set-wallpaper-mood";
+      };
     };
   };
 
