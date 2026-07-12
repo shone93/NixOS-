@@ -62,30 +62,45 @@ lives in **HOSTS.md**. Stardew is deliberately still on the OLD architecture
 
 ## Wallust dynamic theming (Stardew / whitewolf)
 
-Opt-in wallpaper-driven color theming, scoped to Stardew + whitewolf only.
-Trigger: `set-wallpaper-mood [path]` (or `Meta+Shift+W` to pick via file dialog).
-It sets the wallpaper, runs `wallust run <image>` to regenerate palettes, and
-applies the KDE colorscheme live via `plasma-apply-colorscheme Wallust` — no
-session restart needed (confirmed working). New Ghostty/Yazi windows pick up the
-new colors; already-open ones must be restarted.
+Wallpaper-driven color theming, scoped to whitewolf. The wallpaper set in `<Host>.nix`
+(`programs.plasma.workspace.wallpaper`) is the single source of truth. A home-manager
+activation step (`wallust-generate` in `home/whitewolf/theming.nix`) runs
+`wallust run <wallpaper>` at every rebuild — skipped when the wallpaper path is
+unchanged (tracked via `~/.cache/wallust/.built-from`) — regenerating all palettes.
+The old static berserk fallback has been removed; there is no static default anymore.
 
-Config lives in `home/whitewolf/theming.nix` (wallust.toml + templates, managed by
-home-manager as read-only store symlinks — that's fine, only the *generated output*
-files must be mutable).
+Live change: `set-wallpaper-mood [path]` (or `Meta+Shift+W` to pick via file dialog) —
+sets the wallpaper, runs `wallust run <image>`, and applies the KDE colorscheme live via
+`plasma-apply-colorscheme Wallust` (no session restart). New Ghostty/Yazi windows pick up
+the colors; already-open ones must be restarted.
 
-Include-stub pattern (avoids the read-only-symlink problem): home-manager writes a
+Include-stub pattern (avoids the read-only store-symlink problem): home-manager writes a
 stub that includes a writable file wallust owns.
-- Ghostty: `config-file = ?~/.cache/wallust/ghostty-colors` (the `?` = optional; when
-  the file is absent the static berserk theme stays the default).
-- Yazi: flavor switched to `wallust`; `home.activation` seeds
-  `~/.config/yazi/flavors/wallust.yazi/flavor.toml` (+ tmtheme.xml) from the berserk
-  colors if absent, and wallust overwrites it on trigger.
-- KDE: wallust writes `~/.local/share/color-schemes/Wallust.colors` (not managed by
-  home-manager, so writable).
+- Ghostty: `config-file = ?~/.cache/wallust/ghostty-colors` (`?` = optional; if absent,
+  ghostty uses its built-in default).
+- Yazi: flavor set to `wallust`; wallust writes
+  `~/.config/yazi/flavors/wallust.yazi/flavor.toml` (tmtheme.xml is seeded by the
+  activation). The flavor themes UI chrome AND icons — its `[icon]` block replaces Yazi's
+  default icon set with palette-colored `conds` (folders=color4, links=color6,
+  broken=color9, exec=color2, files=foreground).
+- KDE: wallust writes `~/.local/share/color-schemes/Wallust.colors` (not hm-managed, so
+  writable).
+- GTK: wallust writes `~/.config/gtk-3.0/gtk.css` and `gtk-4.0/gtk.css` (libadwaita +
+  legacy `@define-color` vars) so non-KDE GTK apps follow the palette.
+- btop: wallust writes `~/.config/btop/themes/wallust.theme`; `programs.btop` selects it.
+- fastfetch / starship / bat: no templates — they follow the terminal's ANSI palette
+  (which is wallust-driven). fastfetch already uses ANSI color names; whitewolf's starship
+  uses a `wallust-ansi` palette (ANSI names) via a scoped override; bat uses its built-in
+  `ansi` theme (`BAT_THEME=ansi`). These stay in sync automatically, no regeneration.
 
-Rollback: delete `~/.cache/wallust/ghostty-colors` and
-`~/.config/yazi/flavors/wallust.yazi/flavor.toml`, restart the apps. The static
-berserk theme remains the default until `set-wallpaper-mood` is explicitly run.
+Config + templates live in `home/whitewolf/theming.nix` (managed as read-only store
+symlinks — fine, only the generated output files must be mutable).
+
+Auto-retheme: a `systemd --user` service (`wallust-wallpaper-watch`, in theming.nix)
+watches Plasma's desktop config and re-runs wallust when the wallpaper changes via the KDE
+UI (debounced, skips unchanged/slideshow, single-monitor assumption — fragile by nature).
+`set-wallpaper-mood` remains the primary, reliable trigger.
+
 
 ## Adding a new host
 

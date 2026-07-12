@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, config, ... }:
 
 {
   home.packages = [
@@ -41,6 +41,15 @@
 
     yazi.template = "yazi-flavor.toml"
     yazi.target = "~/.config/yazi/flavors/wallust.yazi/flavor.toml"
+
+    gtk3.template = "gtk-colors.css"
+    gtk3.target = "~/.config/gtk-3.0/gtk.css"
+
+    gtk4.template = "gtk-colors.css"
+    gtk4.target = "~/.config/gtk-4.0/gtk.css"
+
+    btop.template = "btop.theme"
+    btop.target = "~/.config/btop/themes/wallust.theme"
   '';
 
   # Ghostty sablon — background/foreground bez #, palette sa #
@@ -280,114 +289,182 @@
         { url = "*/", fg = "{{foreground}}" },
         { url = ".*", fg = "{{color8}}" },
     ]
+
+    [icon]
+    globs = []
+    dirs  = []
+    files = []
+    exts  = []
+    conds = [
+        { if = "orphan", text = "", fg = "{{color9}}" },
+        { if = "link",   text = "", fg = "{{color6}}" },
+        { if = "dir",    text = "", fg = "{{color4}}" },
+        { if = "exec",   text = "", fg = "{{color2}}" },
+        { if = "!dir",   text = "", fg = "{{foreground}}" },
+    ]
   '';
 
-  # Zasejava wallust yazi flavor berserk sadrzajem ako jos ne postoji — wallust ce ga potom prepisati
-  home.activation."seed-wallust-yazi-flavor" = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    _flavor_dir="$HOME/.config/yazi/flavors/wallust.yazi"
-    _flavor_file="$_flavor_dir/flavor.toml"
-    if [ ! -f "$_flavor_file" ]; then
-      ${pkgs.coreutils}/bin/mkdir -p "$_flavor_dir"
-      ${pkgs.coreutils}/bin/cat > "$_flavor_file" << 'BERSERK_EOF'
-[mgr]
-cwd = { fg = "#eb3131" }
-hovered         = { fg = "#fefefe", bg = "#3d3d42" }
-preview_hovered = { underline = true }
-find_keyword  = { fg = "#eb3131", bold = true, italic = true, underline = true }
-find_position = { fg = "#fefefe", bg = "#3d3d42", bold = true }
-marker_copied   = { fg = "#c0392b", bg = "#c0392b" }
-marker_cut      = { fg = "#ff4949", bg = "#ff4949" }
-marker_marked   = { fg = "#eb3131", bg = "#eb3131" }
-marker_selected = { fg = "#ab2e2e", bg = "#ab2e2e" }
-tab_active   = { fg = "#fefefe", bg = "#c0392b" }
-tab_inactive = { fg = "#7a7a7e", bg = "#3d3d42" }
-tab_width    = 1
-count_copied   = { fg = "#1b1b1d", bg = "#c0392b" }
-count_cut      = { fg = "#1b1b1d", bg = "#ff4949" }
-count_selected = { fg = "#1b1b1d", bg = "#eb3131" }
-border_symbol = "│"
-border_style  = { fg = "#7a7a7e" }
-syntect_theme = "./tmtheme.xml"
-cursor_symbol = "█"
-cursor = { fg = "#1b1b1d", bg = "#eb3131" }
-exe_symbol = ""
-exe = { fg = "#eb3131", bg = "#1b1b1d" }
-file_symbol = ""
-file = { }
-folder_symbol = ""
-folder = { fg = "#c0392b", bg = "#1b1b1d" }
-hidden_symbol = ""
-hidden = { fg = "#7a7a7e" }
-link_symbol = ""
-link = { fg = "#eb3131", bg = "#1b1b1d" }
-broken_symbol = ""
-broken = { fg = "#ff4949", bg = "#1b1b1d" }
-selected = { fg = "#fefefe", bg = "#3d3d42" }
+  # GTK sablon — libadwaita (GTK4) + legacy GTK3 imena boja, isti fajl za oba
+  xdg.configFile."wallust/templates/gtk-colors.css".text = ''
+    /* wallust GTK boje — ne edituj rucno */
+    @define-color accent_color {{color4}};
+    @define-color accent_bg_color {{color4}};
+    @define-color accent_fg_color {{foreground}};
+    @define-color window_bg_color {{background}};
+    @define-color window_fg_color {{foreground}};
+    @define-color view_bg_color {{background}};
+    @define-color view_fg_color {{foreground}};
+    @define-color headerbar_bg_color {{color0}};
+    @define-color headerbar_fg_color {{foreground}};
+    @define-color card_bg_color {{color0}};
+    @define-color card_fg_color {{foreground}};
+    @define-color dialog_bg_color {{color0}};
+    @define-color dialog_fg_color {{foreground}};
+    @define-color popover_bg_color {{color0}};
+    @define-color popover_fg_color {{foreground}};
+    @define-color sidebar_bg_color {{color0}};
+    @define-color sidebar_fg_color {{foreground}};
+    @define-color destructive_color {{color1}};
+    @define-color success_color {{color2}};
+    @define-color warning_color {{color3}};
+    @define-color error_color {{color9}};
+    /* GTK3 legacy imena */
+    @define-color theme_bg_color {{background}};
+    @define-color theme_fg_color {{foreground}};
+    @define-color theme_base_color {{background}};
+    @define-color theme_text_color {{foreground}};
+    @define-color theme_selected_bg_color {{color4}};
+    @define-color theme_selected_fg_color {{foreground}};
+  '';
 
-[status]
-separator_open  = ""
-separator_close = ""
-separator_style = { fg = "#3d3d42", bg = "#3d3d42" }
-mode_normal = { fg = "#1b1b1d", bg = "#eb3131", bold = true }
-mode_select = { fg = "#1b1b1d", bg = "#d4956a", bold = true }
-mode_unset  = { fg = "#1b1b1d", bg = "#ff4949", bold = true }
-progress_label  = { bold = true }
-progress_normal = { fg = "#eb3131", bg = "#1b1b1d" }
-progress_error  = { fg = "#ff4949", bg = "#1b1b1d" }
-permissions_t = { fg = "#7a7a7e" }
-permissions_r = { fg = "#d4956a" }
-permissions_w = { fg = "#eb3131" }
-permissions_x = { fg = "#c0392b" }
-permissions_s = { fg = "#7a7a7e" }
+  # btop tema sablon — kompletna tema, gradijenti mapirani na paletu
+  xdg.configFile."wallust/templates/btop.theme".text = ''
+    # wallust btop tema — ne edituj rucno
+    theme[main_bg]="{{background}}"
+    theme[main_fg]="{{foreground}}"
+    theme[title]="{{foreground}}"
+    theme[hi_fg]="{{color4}}"
+    theme[selected_bg]="{{color4}}"
+    theme[selected_fg]="{{background}}"
+    theme[inactive_fg]="{{color8}}"
+    theme[graph_text]="{{color7}}"
+    theme[meter_bg]="{{color0}}"
+    theme[proc_misc]="{{color6}}"
+    theme[cpu_box]="{{color8}}"
+    theme[mem_box]="{{color8}}"
+    theme[net_box]="{{color8}}"
+    theme[proc_box]="{{color8}}"
+    theme[div_line]="{{color8}}"
+    theme[temp_start]="{{color2}}"
+    theme[temp_mid]="{{color3}}"
+    theme[temp_end]="{{color1}}"
+    theme[cpu_start]="{{color2}}"
+    theme[cpu_mid]="{{color6}}"
+    theme[cpu_end]="{{color4}}"
+    theme[free_start]="{{color2}}"
+    theme[free_mid]=""
+    theme[free_end]="{{color2}}"
+    theme[cached_start]="{{color6}}"
+    theme[cached_mid]=""
+    theme[cached_end]="{{color6}}"
+    theme[available_start]="{{color3}}"
+    theme[available_mid]=""
+    theme[available_end]="{{color3}}"
+    theme[used_start]="{{color1}}"
+    theme[used_mid]=""
+    theme[used_end]="{{color1}}"
+    theme[download_start]="{{color4}}"
+    theme[download_mid]=""
+    theme[download_end]="{{color4}}"
+    theme[upload_start]="{{color5}}"
+    theme[upload_mid]=""
+    theme[upload_end]="{{color5}}"
+    theme[process_start]="{{color2}}"
+    theme[process_mid]="{{color3}}"
+    theme[process_end]="{{color1}}"
+  '';
 
-[select]
-border   = { fg = "#eb3131" }
-active   = { fg = "#eb3131", bold = true }
-inactive = {}
+  # btop cita temu "wallust" iz ~/.config/btop/themes/ koju wallust generise
+  programs.btop = {
+    enable = true;
+    settings.color_theme = "wallust";
+  };
 
-[input]
-border   = { fg = "#eb3131" }
-title    = {}
-value    = {}
-selected = { reversed = true }
+  # fastfetch vec prati wallust: koristi ANSI imena boja koja terminal (wallust paleta) renderuje.
+  # starship: sopstvena ANSI paleta da prati iste terminal boje — bez regeneracije po wallpaperu.
+  # (starship.nix je zajednicki sa lizzywizzy; ovde samo za whitewolf menjamo aktivnu paletu)
+  programs.starship.settings = {
+    palette = lib.mkForce "wallust-ansi";
+    palettes.wallust-ansi = {
+      red = "red";
+      bg = "black";
+      fg = "white";
+      gray = "bright-black";
+      accent = "bright-red";
+      yellow = "yellow";
+    };
+  };
 
-[completion]
-border   = { fg = "#eb3131" }
-active   = { fg = "#fefefe", bg = "#c0392b" }
-inactive = {}
-icon_file    = ""
-icon_folder  = ""
-icon_command = ""
+  # bat: ugradjena "ansi" tema koristi 16 ANSI boja terminala (wallust) — bez bat cache build-a.
+  home.sessionVariables.BAT_THEME = "ansi";
 
-[tasks]
-border  = { fg = "#eb3131" }
-title   = {}
-hovered = { underline = true }
-
-[which]
-mask            = { bg = "#1b1b1d" }
-cand            = { fg = "#eb3131" }
-rest            = { fg = "#7a7a7e" }
-desc            = { fg = "#fefefe" }
-separator       = "  "
-separator_style = { fg = "#7a7a7e" }
-
-[help]
-on      = { fg = "#eb3131" }
-run     = { fg = "#c0392b" }
-desc    = { fg = "#fefefe" }
-hovered = { bg = "#3d3d42", bold = true }
-footer  = { fg = "#fefefe", bg = "#3d3d42" }
-
-[filetype]
-rules = [
-    { url = "*", fg = "#fefefe" },
-    { url = "*/", fg = "#fefefe" },
-    { url = ".*", fg = "#7a7a7e" },
-]
-BERSERK_EOF
-      # tmtheme.xml je neophodan uz flavor.toml u yazi flavor direktorijumu
-      ${pkgs.coreutils}/bin/cp ${pkgs.yaziFlavors.vscode-dark-plus}/tmtheme.xml "$_flavor_dir/tmtheme.xml"
+  # Build-time: generise paletu iz nix-konfigurisanog wallpapera pri svakom rebuild-u.
+  # Zamenjuje raniji staticki berserk fallback — wallpaper je jedini izvor boja.
+  home.activation."wallust-generate" = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    _wp="${toString config.programs.plasma.workspace.wallpaper}"
+    if [ -n "$_wp" ]; then
+      _flavor_dir="$HOME/.config/yazi/flavors/wallust.yazi"
+      _marker="$HOME/.cache/wallust/.built-from"
+      ${pkgs.coreutils}/bin/mkdir -p "$_flavor_dir" "$HOME/.cache/wallust" "$HOME/.config/gtk-3.0" "$HOME/.config/gtk-4.0" "$HOME/.config/btop/themes"
+      # tmtheme.xml mora stajati uz flavor.toml u yazi flavor direktorijumu
+      if [ ! -f "$_flavor_dir/tmtheme.xml" ]; then
+        ${pkgs.coreutils}/bin/cp ${pkgs.yaziFlavors.vscode-dark-plus}/tmtheme.xml "$_flavor_dir/tmtheme.xml"
+      fi
+      # regenerisi samo ako se wallpaper promenio (izbegava spor resize na svakom switch-u)
+      if [ "$(${pkgs.coreutils}/bin/cat "$_marker" 2>/dev/null || true)" != "$_wp" ]; then
+        ${pkgs.wallust}/bin/wallust run "$_wp" && ${pkgs.coreutils}/bin/printf '%s' "$_wp" > "$_marker"
+      fi
     fi
   '';
+
+  # Watcher: kad se KDE wallpaper promeni kroz sam Plasma UI (a ne preko set-wallpaper-mood),
+  # regenerise paletu. Fragilno po prirodi: Plasma cesto prepisuje ovaj config i iz drugih
+  # razloga, pa debounce + marker preskacu nepotrebne regene. Uzima poslednji Image= (jedan monitor),
+  # slideshow (direktorijum) preskace.
+  systemd.user.services.wallust-wallpaper-watch = {
+    Unit = {
+      Description = "Regenerise wallust palette on KDE wallpaper change";
+      After = [ "plasma-plasmashell.service" ];
+      PartOf = [ "graphical-session.target" ];
+    };
+    Service = {
+      Restart = "on-failure";
+      RestartSec = 5;
+      ExecStart = "${pkgs.writeShellScript "wallust-wallpaper-watch" ''
+        CFG="$HOME/.config/plasma-org.kde.plasma.desktop-appletsrc"
+        MARK="$HOME/.cache/wallust/.watched-wp"
+        DIR="$(${pkgs.coreutils}/bin/dirname "$CFG")"
+        BASE="$(${pkgs.coreutils}/bin/basename "$CFG")"
+
+        apply() {
+          img=$(${pkgs.gnugrep}/bin/grep -aE '^Image=' "$CFG" 2>/dev/null | ${pkgs.coreutils}/bin/tail -n1 | ${pkgs.gnused}/bin/sed 's/^Image=//; s#^file://##')
+          [ -z "$img" ] && return 0
+          [ -d "$img" ] && return 0
+          [ ! -f "$img" ] && return 0
+          [ "$(${pkgs.coreutils}/bin/cat "$MARK" 2>/dev/null || true)" = "$img" ] && return 0
+          ${pkgs.wallust}/bin/wallust run "$img" && ${pkgs.coreutils}/bin/printf '%s' "$img" > "$MARK"
+          ${pkgs.kdePackages.plasma-workspace}/bin/plasma-apply-colorscheme Wallust 2>/dev/null || true
+        }
+
+        ${pkgs.coreutils}/bin/mkdir -p "$HOME/.cache/wallust"
+        apply
+        ${pkgs.inotify-tools}/bin/inotifywait -m -e close_write -e moved_to "$DIR" 2>/dev/null | while read -r _d _e _f; do
+          case "$_f" in
+            "$BASE"*) ${pkgs.coreutils}/bin/sleep 2; apply ;;
+          esac
+        done
+      ''}";
+    };
+    Install.WantedBy = [ "graphical-session.target" ];
+  };
 }
