@@ -6,7 +6,8 @@
 
     workspace = {
       theme = "breeze-dark";
-      colorScheme = "BreezeDark";
+      # Matugen: šema boja se generiše iz wallpaper-a (mora postojati pri rebuild-u)
+      colorScheme = "Matugen";
       lookAndFeel = "org.kde.breezedark.desktop";
     };
 
@@ -158,7 +159,7 @@
         command = "blender";
       };
       "set-wallpaper-mood" = {
-        name = "Wallpaper mood (wallust)";
+        name = "Wallpaper mood (matugen)";
         key = "Meta+Shift+W";
         command = "set-wallpaper-mood";
       };

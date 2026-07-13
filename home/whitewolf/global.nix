@@ -192,7 +192,7 @@
         '';
     };
     theme.flavor = {
-      dark = "wallust";
+      dark = "matugen";
     };
 
     plugins = with pkgs.yaziPlugins; {

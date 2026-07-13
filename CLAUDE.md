@@ -60,45 +60,61 @@ lives in **HOSTS.md**. Stardew is deliberately still on the OLD architecture
 - Comment style: keep inline `.nix` comments minimal — only short safety/footgun warnings (destructive ops, placeholders, ordering, non-obvious gotchas), written in Serbian to match the code. Architectural/"why" prose lives in Markdown (this file, HOSTS.md, `modules/system/README.md`, `deployment/README.md`) in English — not in inline comments.
 - Skip `flake.lock` unless specifically debugging input versions
 
-## Wallust dynamic theming (Stardew / whitewolf)
+## Matugen dynamic theming (Stardew / whitewolf)
 
-Wallpaper-driven color theming, scoped to whitewolf. The wallpaper set in `<Host>.nix`
-(`programs.plasma.workspace.wallpaper`) is the single source of truth. A home-manager
-activation step (`wallust-generate` in `home/whitewolf/theming.nix`) runs
-`wallust run <wallpaper>` at every rebuild — skipped when the wallpaper path is
-unchanged (tracked via `~/.cache/wallust/.built-from`) — regenerating all palettes.
-The old static berserk fallback has been removed; there is no static default anymore.
+Wallpaper-driven Material You color theming, scoped to whitewolf. The wallpaper set in
+`<Host>.nix` (`programs.plasma.workspace.wallpaper`) is the single source of truth. A
+home-manager activation step (`matugen-generate` in `home/whitewolf/theming.nix`) regenerates
+all palettes at every rebuild — skipped when the wallpaper path is unchanged (tracked via
+`~/.cache/matugen/.built-from`). There is no static default.
+
+**Two-step generation (matugen 4.0.0 workaround):** `matugen image` in 4.0.0 (a) tries to
+*interactively* prompt for which ranked color to use — it hangs / errors `IO error: not a
+terminal` headless — and (b) emits a **grayscale** `base16`. So the pipeline instead: (1)
+`matugen image <wp> --source-color-index 0 -j hex --dry-run | jq …source_color` to extract the
+source color headlessly, then (2) `matugen color hex <src> -c config.toml`, which produces a
+proper colorful `base16` AND the Material `colors.*` roles. This lives in the `matugen-run`
+script in `theming.nix`.
+
+**Color model:** Material roles (`primary`, `surface`, `on_surface`, `secondary`, `tertiary`,
+`error`, `surface_container*`, `outline*` …) drive KDE, GTK, btop chrome, and the Yazi flavor.
+The `base16.base00–base0f` palette drives the terminal 16 colors (Ghostty) and btop's meter
+gradients; fastfetch/starship/bat follow that terminal ANSI palette. Note base16 is
+hue-harmonized around the wallpaper's source color, so the ANSI "red/green/…" slots are tinted,
+not literal — this is inherent to Material color, not a bug.
 
 Live change: `set-wallpaper-mood [path]` (or `Meta+Shift+W` to pick via file dialog) —
-sets the wallpaper, runs `wallust run <image>`, and applies the KDE colorscheme live via
-`plasma-apply-colorscheme Wallust` (no session restart). New Ghostty/Yazi windows pick up
-the colors; already-open ones must be restarted.
+sets the wallpaper, runs the two-step matugen generation, reloads open Ghostty via `SIGUSR2`,
+and applies the KDE colorscheme live. `plasma-apply-colorscheme` no-ops when the scheme name is
+unchanged, so it bounces through `BreezeDark` first to force a reload, and deletes the custom
+`AccentColor` override in kdeglobals so the accent follows the scheme. Ghostty is
+single-instance (`gtk-single-instance` defaults to `desktop`), so the `SIGUSR2` reload — not
+opening a new window — is what makes both open and new Ghostty windows track the palette;
+Yazi windows must be reopened.
 
-Include-stub pattern (avoids the read-only store-symlink problem): home-manager writes a
-stub that includes a writable file wallust owns.
-- Ghostty: `config-file = ?~/.cache/wallust/ghostty-colors` (`?` = optional; if absent,
+Include-stub pattern (avoids the read-only store-symlink problem): home-manager writes the
+matugen config + templates as read-only store symlinks under `~/.config/matugen/`; matugen
+reads them and writes the *generated* palettes to mutable output files.
+- Ghostty: `config-file = ?~/.cache/matugen/ghostty-colors` (`?` = optional; if absent,
   ghostty uses its built-in default).
-- Yazi: flavor set to `wallust`; wallust writes
-  `~/.config/yazi/flavors/wallust.yazi/flavor.toml` (tmtheme.xml is seeded by the
-  activation). The flavor themes UI chrome AND icons — its `[icon]` block replaces Yazi's
-  default icon set with palette-colored `conds` (folders=color4, links=color6,
-  broken=color9, exec=color2, files=foreground).
-- KDE: wallust writes `~/.local/share/color-schemes/Wallust.colors` (not hm-managed, so
+- Yazi: flavor set to `matugen`; matugen writes
+  `~/.config/yazi/flavors/matugen.yazi/flavor.toml` (tmtheme.xml is seeded by the activation).
+  The flavor themes UI chrome AND icons — its appended icon set is recolored to `primary`.
+- KDE: matugen writes `~/.local/share/color-schemes/Matugen.colors` (not hm-managed, so
   writable).
-- GTK: wallust writes `~/.config/gtk-3.0/gtk.css` and `gtk-4.0/gtk.css` (libadwaita +
+- GTK: matugen writes `~/.config/gtk-3.0/gtk.css` and `gtk-4.0/gtk.css` (libadwaita +
   legacy `@define-color` vars) so non-KDE GTK apps follow the palette.
-- btop: wallust writes `~/.config/btop/themes/wallust.theme`; `programs.btop` selects it.
+- btop: matugen writes `~/.config/btop/themes/matugen.theme`; `programs.btop` selects it.
 - fastfetch / starship / bat: no templates — they follow the terminal's ANSI palette
-  (which is wallust-driven). fastfetch already uses ANSI color names; whitewolf's starship
-  uses a `wallust-ansi` palette (ANSI names) via a scoped override; bat uses its built-in
-  `ansi` theme (`BAT_THEME=ansi`). These stay in sync automatically, no regeneration.
+  (which is matugen-base16-driven). whitewolf's starship uses a `matugen-ansi` palette
+  (ANSI names) via a scoped override; bat uses its built-in `ansi` theme (`BAT_THEME=ansi`).
 
 Config + templates live in `home/whitewolf/theming.nix` (managed as read-only store
 symlinks — fine, only the generated output files must be mutable).
 
-Auto-retheme: a `systemd --user` service (`wallust-wallpaper-watch`, in theming.nix)
-watches Plasma's desktop config and re-runs wallust when the wallpaper changes via the KDE
-UI (debounced, skips unchanged/slideshow, single-monitor assumption — fragile by nature).
+Auto-retheme: a `systemd --user` service (`matugen-wallpaper-watch`, in theming.nix) watches
+Plasma's desktop config and re-runs matugen when the wallpaper changes via the KDE UI
+(debounced, skips unchanged/slideshow, single-monitor assumption — fragile by nature).
 `set-wallpaper-mood` remains the primary, reliable trigger.
 
 
