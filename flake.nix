@@ -192,6 +192,12 @@
         '';
       };
 
+      # VM test: impermanence wipe-on-boot + /persist prezivljavanje + auth.
+      # Tezak (disko + dupli boot); pokreni na masini sa /dev/kvm ili u CI-ju.
+      checks.${system}.impermanence-test = import ./tests/impermanence.nix {
+        inherit inputs system pkgs;
+      };
+
       topology.${system} = import inputs.nix-topology {
         pkgs = import nixpkgs {
           inherit system;

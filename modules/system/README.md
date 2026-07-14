@@ -18,7 +18,8 @@ This file complements [CLAUDE.md](../../CLAUDE.md) (architecture index) and [HOS
 | `apps-desktop.nix` | Creative/rendering app bundle: blender, gimp, inkscape, krita, godot — now used by Evangelion |
 | `apps-niri.nix` | Niri-specific packages — **not imported anywhere yet** |
 | `niri.nix` | Niri compositor module — **not imported anywhere yet** |
-| `impermanence.nix` | Wipe-on-boot rollback service + persistence declarations |
+| `impermanence.nix` | Persistence declarations (persist list incl. SSH host keys, /home/whitewolf); imports `impermanence-rollback.nix` + the impermanence flake module — SolidSnake + Evangelion only |
+| `impermanence-rollback.nix` | Wipe-on-boot rollback service (recreates blank `@` before root mount). Mounts the btrfs at `/dev/mapper/crypted`, ordered after `systemd-cryptsetup@crypted.service`. Inputs-free so the VM test reuses it verbatim |
 | `impermanence-lizzywizzy.nix` | Adds /home/lizzywizzy to persist — SolidSnake only |
 | `btrfs-snapshots.nix` | Snapper timeline snapshots over /persist — SolidSnake and Evangelion |
 | `ssh.nix` | OpenSSH service — SolidSnake and Evangelion only (required for nixos-anywhere deploy) |
@@ -29,7 +30,7 @@ This file complements [CLAUDE.md](../../CLAUDE.md) (architecture index) and [HOS
 | Dir | Purpose |
 |-----|---------|
 | `drivers/` | One GPU module per host: `nvidia-laptop.nix` (Stardew, GTX 960M + PRIME), `nvidia-desktop.nix` (SolidSnake, GTX 1080), `nvidia-placeholder.nix` (Evangelion, unknown GPU) |
-| `disko/` | Declarative disk layout for Terraform-managed hosts: `desktop-btrfs.nix` (SolidSnake), `laptop-btrfs.nix` (Evangelion) |
+| `disko/` | Declarative disk layout for Terraform-managed hosts: `desktop-btrfs.nix` (SolidSnake), `laptop-btrfs.nix` (Evangelion). Both are LUKS+btrfs. `btrfs-luks-layout.nix` is the shared pure layout consumed by `laptop-btrfs.nix` and the impermanence VM test |
 | `users/` | NixOS user account declarations: `whitewolf.nix` (wheel, all hosts), `lizzywizzy.nix` (no wheel, Stardew + SolidSnake) |
 
 ## Persistence & wipe-on-boot
@@ -64,3 +65,14 @@ Both `disko/desktop-btrfs.nix` and `disko/laptop-btrfs.nix` declare a single btr
 - `secrets.nix` is active on all hosts (via `commonModules`) but the sops config block is guarded by `lib.mkIf (builtins.pathExists ../../secrets.yaml)` so `nix flake check` passes even without a real secrets file.
 - User passwords: `whitewolf-password` (all hosts) and `lizzywizzy-password` (Stardew/SolidSnake only) are `neededForUsers` sops secrets holding `mkpasswd -m sha-512` hashes. `users/whitewolf.nix` and `users/lizzywizzy.nix` wire them via `hashedPasswordFile`, but only where `users.mutableUsers = false` (SolidSnake + Evangelion, set per-host) — so Stardew keeps mutable `passwd`. If `secrets.yaml` is missing, the impermanence hosts fail closed (account locked, not passwordless).
 - New-machine onboarding steps (age keys, updating `.sops.yaml`, password hashes, re-encrypting) are documented in [CLAUDE.md](../../CLAUDE.md) under **Sops — new machine onboarding** and, copy-paste form, in [deployment/README.md](../../deployment/README.md).
+
+## VM test — impermanence wipe-on-boot
+
+`tests/impermanence.nix` (wired as `checks.x86_64-linux.impermanence-test` in
+`flake.nix`) is a `disko.lib.testLib.makeDiskoTest` NixOS VM test. It formats the
+real LUKS+btrfs layout, installs a minimal system using the real
+`impermanence-rollback.nix`, then reboots and asserts: the `@` root marker is
+gone, `/persist` survived, and whitewolf's declarative password re-appears in
+`/etc/shadow` after the wipe. It requires `/dev/kvm` to run at reasonable speed
+(runs under slow TCG otherwise) — prefer running it in CI (see TASK 8) rather
+than the local pre-commit hook.
