@@ -9,7 +9,9 @@ let
   # matugen 4.0.0 image mode je pokvaren — kvantizer uvek vrati fallback boju
   # (#4285f4), pa svaki wallpaper daje istu paletu. Zato source boju vadimo
   # imagemagick-om (kvantizuj → biraj boju sa najviše chroma×učestalost; ako je
-  # slika siva, uzmi dominantni ton), pa je damo `matugen color hex`.
+  # slika siva, uzmi dominantni ton) i damo je `matugen color hex` sa
+  # --contrast 0.5 (gura on_surface ka beloj → čitljiviji UI tekst). Boju NE
+  # blendujemo ka crvenoj: pozadine/surface ostaju neutralne (ne tople).
   matugenRun = pkgs.writeShellScript "matugen-run" ''
     set -eu
     img="$1"
@@ -23,9 +25,9 @@ let
             if(sat>0.15){score=(sat^1.5)*(cnt^0.5); if(score>best){best=score;br=r;bg=g;bb=b}}
           }
         }
-        END{ if(best>0) printf("#%02x%02x%02x",br,bg,bb); else if(domcnt>0) printf("#%02x%02x%02x",dr,dg,db); else print "#4285f4" }')
+        END{ if(best>0) printf("#%02x%02x%02x",br,bg,bb); else if(domcnt>0) printf("#%02x%02x%02x",dr,dg,db); else print "#808080" }')
     [ -z "$src" ] && exit 1
-    ${pkgs.matugen}/bin/matugen color hex "$src" -c "$HOME/.config/matugen/config.toml" >/dev/null 2>&1
+    ${pkgs.matugen}/bin/matugen color hex "$src" --contrast 0.5 -c "$HOME/.config/matugen/config.toml" >/dev/null 2>&1
   '';
 
   # KDE live-apply: plasma-apply preskače šemu istog imena, pa bounce kroz
@@ -98,10 +100,10 @@ in
   xdg.configFile."matugen/templates/ghostty-colors".text = ''
     # matugen generisane boje — ne edituj ručno
     background = {{base16.base00.default.hex_stripped}}
-    foreground = {{base16.base05.default.hex_stripped}}
+    foreground = ffffff
     cursor-color = {{base16.base0d.default.hex_stripped}}
     palette = 0={{base16.base00.default.hex}}
-    palette = 1={{base16.base08.default.hex}}
+    palette = 1=#eb3131
     palette = 2={{base16.base0b.default.hex}}
     palette = 3={{base16.base0a.default.hex}}
     palette = 4={{base16.base0d.default.hex}}
@@ -109,7 +111,7 @@ in
     palette = 6={{base16.base0c.default.hex}}
     palette = 7={{base16.base05.default.hex}}
     palette = 8={{base16.base03.default.hex}}
-    palette = 9={{base16.base08.default.hex}}
+    palette = 9=#eb3131
     palette = 10={{base16.base0b.default.hex}}
     palette = 11={{base16.base0a.default.hex}}
     palette = 12={{base16.base0d.default.hex}}
