@@ -267,7 +267,13 @@
   # tmux: allow-passthrough je neophodan za yazi image preview u tmux-u.
   programs.tmux = {
     enable = true;
+    prefix = "C-a"; # prefiks Ctrl+a (lakse od podrazumevanog Ctrl+b)
+    mouse = true; # klik na panel, scroll, drag za resize
+    baseIndex = 1; # prozori/paneli krecu od 1, ne od 0
+    historyLimit = 100000;
+    escapeTime = 10; # bez kasnjenja na Esc
     extraConfig = ''
+      setw -g pane-base-index 1
       set -g allow-passthrough all
       set -ga update-environment TERM
       set -ga update-environment TERM_PROGRAM
