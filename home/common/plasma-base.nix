@@ -5,7 +5,10 @@
     enable = true;
 
     workspace = {
-      theme = "breeze-dark";
+      # "default" = Breeze Plasma stil koji PRATI color scheme -> panel/taskbar uzimaju
+      # Matugen boje. "breeze-dark" ima fiksne boje pa panel ostane crn bez obzira na
+      # wallpaper. Primenjuje se POSLE lookAndFeel-a (plasma-manager redosled), pa pobedi.
+      theme = "default";
       # Matugen: šema boja se generiše iz wallpaper-a (mora postojati pri rebuild-u)
       colorScheme = "Matugen";
       lookAndFeel = "org.kde.breezedark.desktop";
