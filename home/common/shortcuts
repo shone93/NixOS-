@@ -97,6 +97,12 @@ key "Ctrl+a [" "Scroll / copy mode (q za izlaz)"
 key "Ctrl+a ?" "Prikaži sve tmux prečice"
 key "Miš" "Klik / scroll / drag radi (mouse on)"
 
+header "TEMA / BOJE (matugen)"
+key "set-wallpaper-mood" "Izaberi pozadinu + generiši temu (auto-boja)"
+key "set-wallpaper-mood sl #hex" "Pozadina + forsiraj boju"
+key "mood-color '#eb3131'" "Forsiraj boju teme za trenutnu pozadinu"
+key "mood-color auto" "Vrati auto-boju iz pozadine"
+
 header "NIX (održavanje)"
 key "rebuild" "Build + commit + push (auto host)"
 key "update" "nix flake update (novi paketi)"

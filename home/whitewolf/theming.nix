@@ -15,17 +15,24 @@ let
   matugenRun = pkgs.writeShellScript "matugen-run" ''
     set -eu
     img="$1"
-    src=$(${pkgs.imagemagick}/bin/magick "$img" -alpha off -resize 25% -colors 32 -depth 8 -format '%c' histogram:info: 2>/dev/null \
-      | ${pkgs.gawk}/bin/gawk 'match($0,/\(([0-9]+),[[:space:]]*([0-9]+),[[:space:]]*([0-9]+)/,m){
-          cnt=$1+0;r=m[1];g=m[2];b=m[3];
-          mx=r;if(g>mx)mx=g;if(b>mx)mx=b; mn=r;if(g<mn)mn=g;if(b<mn)mn=b;
-          sat=(mx==0)?0:(mx-mn)/mx; val=mx/255;
-          if(val>0.10&&val<0.98){
-            if(cnt>domcnt){domcnt=cnt;dr=r;dg=g;db=b}
-            if(sat>0.15){score=(sat^1.5)*(cnt^0.5); if(score>best){best=score;br=r;bg=g;bb=b}}
+    marker="$HOME/.cache/matugen/.forced-color"
+    # Prioritet izvora boje: forsirana boja (mood-color marker) > auto-ekstrakcija.
+    # Marker drzi npr. "#eb3131" kad auto-pick promasi mood (npr. plava iz Guts slike).
+    if [ -s "$marker" ]; then
+      src="$(${pkgs.coreutils}/bin/cat "$marker")"
+    else
+      src=$(${pkgs.imagemagick}/bin/magick "$img" -alpha off -resize 25% -colors 32 -depth 8 -format '%c' histogram:info: 2>/dev/null \
+        | ${pkgs.gawk}/bin/gawk 'match($0,/\(([0-9]+),[[:space:]]*([0-9]+),[[:space:]]*([0-9]+)/,m){
+            cnt=$1+0;r=m[1];g=m[2];b=m[3];
+            mx=r;if(g>mx)mx=g;if(b>mx)mx=b; mn=r;if(g<mn)mn=g;if(b<mn)mn=b;
+            sat=(mx==0)?0:(mx-mn)/mx; val=mx/255;
+            if(val>0.10&&val<0.98){
+              if(cnt>domcnt){domcnt=cnt;dr=r;dg=g;db=b}
+              if(sat>0.15){score=(sat^1.5)*(cnt^0.5); if(score>best){best=score;br=r;bg=g;bb=b}}
+            }
           }
-        }
-        END{ if(best>0) printf("#%02x%02x%02x",br,bg,bb); else if(domcnt>0) printf("#%02x%02x%02x",dr,dg,db); else print "#808080" }')
+          END{ if(best>0) printf("#%02x%02x%02x",br,bg,bb); else if(domcnt>0) printf("#%02x%02x%02x",dr,dg,db); else print "#808080" }')
+    fi
     [ -z "$src" ] && exit 1
     ${pkgs.matugen}/bin/matugen color hex "$src" --contrast 0.5 -c "$HOME/.config/matugen/config.toml" >/dev/null 2>&1
   '';
@@ -48,12 +55,21 @@ in
     # set-wallpaper-mood: bira pozadinu, generiše paletu matugen-om, primenjuje KDE šemu
     (pkgs.writeShellScriptBin "set-wallpaper-mood" ''
       set -e
-
-      if [ $# -eq 0 ]; then
+      # Upotreba: set-wallpaper-mood [slika] [#hex]
+      #   bez slike -> kdialog; bez #hex -> auto-boja iz slike; sa #hex -> forsiraj boju.
+      if [ $# -eq 0 ] || [ -z "$1" ]; then
         img=$(${pkgs.kdePackages.kdialog}/bin/kdialog --getopenfilename "$HOME/Documents/nixos-config/home/wallpapers" "Images (*.jpg *.jpeg *.png *.webp)" 2>/dev/null || true)
         [ -z "$img" ] && exit 0
       else
         img="$1"
+      fi
+
+      ${pkgs.coreutils}/bin/mkdir -p "$HOME/.cache/matugen"
+      marker="$HOME/.cache/matugen/.forced-color"
+      if [ "$#" -ge 2 ] && [ -n "$2" ]; then
+        ${pkgs.coreutils}/bin/printf '%s' "$2" > "$marker" # forsiraj boju
+      else
+        ${pkgs.coreutils}/bin/rm -f "$marker" # nova pozadina => auto-boja
       fi
 
       img=$(realpath "$img")
@@ -61,6 +77,32 @@ in
       ${matugenRun} "$img"
       ${matugenApplyKde}
       echo "Boje primenjene. Ghostty se osvežava automatski; za Yazi otvori novi prozor."
+    '')
+
+    # mood-color: forsiraj/oslobodi boju teme za TRENUTNU pozadinu (kad auto-pick promasi mood).
+    (pkgs.writeShellScriptBin "mood-color" ''
+      set -e
+      marker="$HOME/.cache/matugen/.forced-color"
+      cfg="$HOME/.config/plasma-org.kde.plasma.desktop-appletsrc"
+      ${pkgs.coreutils}/bin/mkdir -p "$HOME/.cache/matugen"
+      case "''${1:-}" in
+        "" | -h | --help)
+          echo "Upotreba:"
+          echo "  mood-color '#eb3131'   forsiraj boju teme (ostaje dok ne vratis auto)"
+          echo "  mood-color auto        vrati auto-boju iz pozadine"
+          exit 0
+          ;;
+        auto) ${pkgs.coreutils}/bin/rm -f "$marker" ;;
+        *) ${pkgs.coreutils}/bin/printf '%s' "$1" > "$marker" ;;
+      esac
+      img=$(${pkgs.gnugrep}/bin/grep -aE '^Image=' "$cfg" 2>/dev/null | ${pkgs.coreutils}/bin/tail -n1 | ${pkgs.gnused}/bin/sed 's/^Image=//; s#^file://##')
+      [ -z "$img" ] && {
+        echo "Ne mogu da nadjem trenutnu pozadinu."
+        exit 1
+      }
+      ${matugenRun} "$img"
+      ${matugenApplyKde}
+      echo "Tema regenerisana."
     '')
   ];
 
@@ -103,7 +145,7 @@ in
     foreground = ffffff
     cursor-color = {{base16.base0d.default.hex_stripped}}
     palette = 0={{base16.base00.default.hex}}
-    palette = 1=#eb3131
+    palette = 1={{base16.base08.default.hex}}
     palette = 2={{base16.base0b.default.hex}}
     palette = 3={{base16.base0a.default.hex}}
     palette = 4={{base16.base0d.default.hex}}
@@ -111,7 +153,7 @@ in
     palette = 6={{base16.base0c.default.hex}}
     palette = 7={{base16.base05.default.hex}}
     palette = 8={{base16.base03.default.hex}}
-    palette = 9=#eb3131
+    palette = 9={{base16.base08.default.hex}}
     palette = 10={{base16.base0b.default.hex}}
     palette = 11={{base16.base0a.default.hex}}
     palette = 12={{base16.base0d.default.hex}}
