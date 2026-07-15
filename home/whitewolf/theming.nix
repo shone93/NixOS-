@@ -34,17 +34,63 @@ let
           END{ if(best>0) printf("#%02x%02x%02x",br,bg,bb); else if(domcnt>0) printf("#%02x%02x%02x",dr,dg,db); else print "#808080" }')
     fi
     [ -z "$src" ] && exit 1
+    ${pkgs.coreutils}/bin/mkdir -p "$HOME/.cache/matugen"
+    ${pkgs.coreutils}/bin/printf '%s' "$src" > "$HOME/.cache/matugen/.source-color"
     ${pkgs.matugen}/bin/matugen color hex "$src" --contrast 0.5 -c "$HOME/.config/matugen/config.toml" >/dev/null 2>&1
+    ${matugenTint}
   '';
 
-  # KDE live-apply: plasma-apply preskače šemu istog imena, pa bounce kroz
-  # BreezeDark forsira reload; obriši custom AccentColor da akcenat prati šemu;
-  # ghostty je single-instance pa SIGUSR2 osvežava paletu u tekućem procesu.
+  # KDE live-apply: plasma-apply preskače šemu istog imena, pa bounce kroz BreezeDark
+  # forsira reload; accent (folderi) postavlja matugenTint; ghostty je single-instance
+  # pa SIGUSR2 osvežava paletu u tekućem procesu.
   matugenApplyKde = pkgs.writeShellScript "matugen-apply-kde" ''
     ${pkgs.procps}/bin/pkill -USR2 ghostty 2>/dev/null || true
-    ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 --file kdeglobals --group General --key AccentColor --delete 2>/dev/null || true
     ${pkgs.kdePackages.plasma-workspace}/bin/plasma-apply-colorscheme BreezeDark >/dev/null 2>&1 || true
     ${pkgs.kdePackages.plasma-workspace}/bin/plasma-apply-colorscheme Matugen >/dev/null 2>&1 || true
+  '';
+
+  # Tint pozadina: blenduje zasicene primary tonove (20/25/30) sa neutralnim surface
+  # tonovima; odnos u ~/.cache/matugen/.tint (0-100, default 40). Upisuje pozadine u
+  # KDE/GTK/btop (ostalo — akcenti/tekst — ostaje iz matugen šablona). Boju vuce iz
+  # ~/.cache/matugen/.source-color (upisuje matugenRun). Folderi (Breeze
+  # .ColorScheme-Accent) prate primary_container preko kdeglobals AccentColor.
+  matugenTint = pkgs.writeShellScript "matugen-tint" ''
+    set -eu
+    cache="$HOME/.cache/matugen"
+    ratio=$(${pkgs.coreutils}/bin/cat "$cache/.tint" 2>/dev/null || echo 40)
+    src=$(${pkgs.coreutils}/bin/cat "$cache/.source-color" 2>/dev/null || true)
+    [ -z "$src" ] && exit 0
+    json=$(${pkgs.matugen}/bin/matugen color hex "$src" --contrast 0.5 -j hex --dry-run 2>/dev/null) || exit 0
+    jget() { ${pkgs.coreutils}/bin/printf '%s' "$json" | ${pkgs.jq}/bin/jq -r "$1"; }
+    p20=$(jget '.palettes.primary["20"].color'); p25=$(jget '.palettes.primary["25"].color'); p30=$(jget '.palettes.primary["30"].color')
+    nlo=$(jget '.colors.surface_container_low.dark.color'); nco=$(jget '.colors.surface_container.dark.color'); nhi=$(jget '.colors.surface_container_high.dark.color')
+    pc=$(jget '.colors.primary_container.dark.color')
+    blend() { ${pkgs.gawk}/bin/gawk -v a="$1" -v b="$2" -v r="$ratio" -v m="$3" 'BEGIN{ar=strtonum("0x"substr(a,2,2));ag=strtonum("0x"substr(a,4,2));ab=strtonum("0x"substr(a,6,2));br=strtonum("0x"substr(b,2,2));bg=strtonum("0x"substr(b,4,2));bb=strtonum("0x"substr(b,6,2));f=r/100;R=int(ar*f+br*(1-f)+0.5);G=int(ag*f+bg*(1-f)+0.5);B=int(ab*f+bb*(1-f)+0.5);if(m=="rgb")printf"%d,%d,%d",R,G,B;else printf"#%02x%02x%02x",R,G,B}'; }
+    h2r() { ${pkgs.gawk}/bin/gawk -v h="$1" 'BEGIN{printf"%d,%d,%d",strtonum("0x"substr(h,2,2)),strtonum("0x"substr(h,4,2)),strtonum("0x"substr(h,6,2))}'; }
+    bgr=$(blend "$p20" "$nlo" rgb); bgh=$(blend "$p20" "$nlo" hex)
+    midr=$(blend "$p25" "$nco" rgb); midh=$(blend "$p25" "$nco" hex)
+    hir=$(blend "$p30" "$nhi" rgb); hih=$(blend "$p30" "$nhi" hex)
+    ks="$HOME/.local/share/color-schemes/Matugen.colors"
+    if [ -f "$ks" ]; then
+      kw() { ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 --file "$ks" --group "$1" --key "$2" "$3"; }
+      for g in "Colors:Window" "Colors:View" "Colors:Complementary"; do kw "$g" BackgroundNormal "$bgr"; kw "$g" BackgroundAlternate "$midr"; done
+      kw "Colors:Button" BackgroundNormal "$hir"; kw "Colors:Button" BackgroundAlternate "$midr"
+      kw "Colors:Tooltip" BackgroundNormal "$midr"; kw "Colors:Tooltip" BackgroundAlternate "$hir"
+      kw WM activeBackground "$hir"; kw WM activeBlend "$hir"; kw WM inactiveBackground "$bgr"; kw WM inactiveBlend "$bgr"
+    fi
+    for gf in "$HOME/.config/gtk-3.0/gtk.css" "$HOME/.config/gtk-4.0/gtk.css"; do
+      [ -f "$gf" ] || continue
+      for n in window_bg_color view_bg_color sidebar_bg_color theme_bg_color theme_base_color; do ${pkgs.gnused}/bin/sed -i "s|@define-color $n .*;|@define-color $n $bgh;|" "$gf"; done
+      for n in headerbar_bg_color card_bg_color popover_bg_color; do ${pkgs.gnused}/bin/sed -i "s|@define-color $n .*;|@define-color $n $midh;|" "$gf"; done
+      ${pkgs.gnused}/bin/sed -i "s|@define-color dialog_bg_color .*;|@define-color dialog_bg_color $hih;|" "$gf"
+    done
+    bt="$HOME/.config/btop/themes/matugen.theme"
+    if [ -f "$bt" ]; then
+      ${pkgs.gnused}/bin/sed -i "s|theme\[main_bg\]=.*|theme[main_bg]=\"$bgh\"|" "$bt"
+      ${pkgs.gnused}/bin/sed -i "s|theme\[meter_bg\]=.*|theme[meter_bg]=\"$midh\"|" "$bt"
+    fi
+    ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 --file kdeglobals --group General --key AccentColor "$(h2r "$pc")"
+    ${pkgs.coreutils}/bin/rm -f "$HOME/.cache/icon-cache.kcache" 2>/dev/null || true
   '';
 in
 {
@@ -103,6 +149,22 @@ in
       ${matugenRun} "$img"
       ${matugenApplyKde}
       echo "Tema regenerisana."
+    '')
+
+    # plasma-tint <0-100>: koliko boje u pozadinama (0=neutralno sivo, 100=puna boja; default 40).
+    (pkgs.writeShellScriptBin "plasma-tint" ''
+      set -e
+      case "''${1:-}" in
+        "" | -h | --help)
+          echo "Upotreba: plasma-tint <0-100>  (0=neutralno sivo, 100=puna boja; default 40)"
+          exit 0
+          ;;
+      esac
+      ${pkgs.coreutils}/bin/mkdir -p "$HOME/.cache/matugen"
+      ${pkgs.coreutils}/bin/printf '%s' "$1" > "$HOME/.cache/matugen/.tint"
+      ${matugenTint}
+      ${matugenApplyKde}
+      echo "Tint = $1%. Primenjeno."
     '')
   ];
 
