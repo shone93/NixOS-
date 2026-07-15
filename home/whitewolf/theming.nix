@@ -185,8 +185,8 @@ in
     IntensityEffect=0
 
     [Colors:Button]
-    BackgroundAlternate={{colors.surface_container.default.red}},{{colors.surface_container.default.green}},{{colors.surface_container.default.blue}}
-    BackgroundNormal={{colors.surface_container_high.default.red}},{{colors.surface_container_high.default.green}},{{colors.surface_container_high.default.blue}}
+    BackgroundAlternate={{base16.base02.default.red}},{{base16.base02.default.green}},{{base16.base02.default.blue}}
+    BackgroundNormal={{base16.base03.default.red}},{{base16.base03.default.green}},{{base16.base03.default.blue}}
     DecorationFocus={{colors.primary.default.red}},{{colors.primary.default.green}},{{colors.primary.default.blue}}
     DecorationHover={{colors.secondary.default.red}},{{colors.secondary.default.green}},{{colors.secondary.default.blue}}
     ForegroundActive={{colors.primary.default.red}},{{colors.primary.default.green}},{{colors.primary.default.blue}}
@@ -199,8 +199,8 @@ in
     ForegroundVisited={{colors.tertiary.default.red}},{{colors.tertiary.default.green}},{{colors.tertiary.default.blue}}
 
     [Colors:Complementary]
-    BackgroundAlternate={{colors.surface_container_lowest.default.red}},{{colors.surface_container_lowest.default.green}},{{colors.surface_container_lowest.default.blue}}
-    BackgroundNormal={{colors.surface_container_lowest.default.red}},{{colors.surface_container_lowest.default.green}},{{colors.surface_container_lowest.default.blue}}
+    BackgroundAlternate={{base16.base02.default.red}},{{base16.base02.default.green}},{{base16.base02.default.blue}}
+    BackgroundNormal={{base16.base01.default.red}},{{base16.base01.default.green}},{{base16.base01.default.blue}}
     DecorationFocus={{colors.primary.default.red}},{{colors.primary.default.green}},{{colors.primary.default.blue}}
     DecorationHover={{colors.secondary.default.red}},{{colors.secondary.default.green}},{{colors.secondary.default.blue}}
     ForegroundActive={{colors.primary.default.red}},{{colors.primary.default.green}},{{colors.primary.default.blue}}
@@ -227,8 +227,8 @@ in
     ForegroundVisited={{colors.on_primary.default.red}},{{colors.on_primary.default.green}},{{colors.on_primary.default.blue}}
 
     [Colors:Tooltip]
-    BackgroundAlternate={{colors.surface_container_highest.default.red}},{{colors.surface_container_highest.default.green}},{{colors.surface_container_highest.default.blue}}
-    BackgroundNormal={{colors.surface_container_highest.default.red}},{{colors.surface_container_highest.default.green}},{{colors.surface_container_highest.default.blue}}
+    BackgroundAlternate={{base16.base03.default.red}},{{base16.base03.default.green}},{{base16.base03.default.blue}}
+    BackgroundNormal={{base16.base02.default.red}},{{base16.base02.default.green}},{{base16.base02.default.blue}}
     DecorationFocus={{colors.primary.default.red}},{{colors.primary.default.green}},{{colors.primary.default.blue}}
     DecorationHover={{colors.secondary.default.red}},{{colors.secondary.default.green}},{{colors.secondary.default.blue}}
     ForegroundActive={{colors.primary.default.red}},{{colors.primary.default.green}},{{colors.primary.default.blue}}
@@ -241,8 +241,8 @@ in
     ForegroundVisited={{colors.tertiary.default.red}},{{colors.tertiary.default.green}},{{colors.tertiary.default.blue}}
 
     [Colors:View]
-    BackgroundAlternate={{colors.surface_container_low.default.red}},{{colors.surface_container_low.default.green}},{{colors.surface_container_low.default.blue}}
-    BackgroundNormal={{colors.surface.default.red}},{{colors.surface.default.green}},{{colors.surface.default.blue}}
+    BackgroundAlternate={{base16.base02.default.red}},{{base16.base02.default.green}},{{base16.base02.default.blue}}
+    BackgroundNormal={{base16.base01.default.red}},{{base16.base01.default.green}},{{base16.base01.default.blue}}
     DecorationFocus={{colors.primary.default.red}},{{colors.primary.default.green}},{{colors.primary.default.blue}}
     DecorationHover={{colors.secondary.default.red}},{{colors.secondary.default.green}},{{colors.secondary.default.blue}}
     ForegroundActive={{colors.primary.default.red}},{{colors.primary.default.green}},{{colors.primary.default.blue}}
@@ -255,8 +255,8 @@ in
     ForegroundVisited={{colors.tertiary.default.red}},{{colors.tertiary.default.green}},{{colors.tertiary.default.blue}}
 
     [Colors:Window]
-    BackgroundAlternate={{colors.surface_container.default.red}},{{colors.surface_container.default.green}},{{colors.surface_container.default.blue}}
-    BackgroundNormal={{colors.surface.default.red}},{{colors.surface.default.green}},{{colors.surface.default.blue}},200
+    BackgroundAlternate={{base16.base02.default.red}},{{base16.base02.default.green}},{{base16.base02.default.blue}}
+    BackgroundNormal={{base16.base01.default.red}},{{base16.base01.default.green}},{{base16.base01.default.blue}}
     DecorationFocus={{colors.primary.default.red}},{{colors.primary.default.green}},{{colors.primary.default.blue}}
     DecorationHover={{colors.secondary.default.red}},{{colors.secondary.default.green}},{{colors.secondary.default.blue}}
     ForegroundActive={{colors.primary.default.red}},{{colors.primary.default.green}},{{colors.primary.default.blue}}
@@ -277,11 +277,11 @@ in
     contrast=4
 
     [WM]
-    activeBackground={{colors.surface_container_high.default.red}},{{colors.surface_container_high.default.green}},{{colors.surface_container_high.default.blue}}
-    activeBlend={{colors.surface_container_high.default.red}},{{colors.surface_container_high.default.green}},{{colors.surface_container_high.default.blue}}
+    activeBackground={{base16.base03.default.red}},{{base16.base03.default.green}},{{base16.base03.default.blue}}
+    activeBlend={{base16.base03.default.red}},{{base16.base03.default.green}},{{base16.base03.default.blue}}
     activeForeground={{colors.on_surface.default.red}},{{colors.on_surface.default.green}},{{colors.on_surface.default.blue}}
-    inactiveBackground={{colors.surface.default.red}},{{colors.surface.default.green}},{{colors.surface.default.blue}}
-    inactiveBlend={{colors.surface.default.red}},{{colors.surface.default.green}},{{colors.surface.default.blue}}
+    inactiveBackground={{base16.base01.default.red}},{{base16.base01.default.green}},{{base16.base01.default.blue}}
+    inactiveBlend={{base16.base01.default.red}},{{base16.base01.default.green}},{{base16.base01.default.blue}}
     inactiveForeground={{colors.on_surface_variant.default.red}},{{colors.on_surface_variant.default.green}},{{colors.on_surface_variant.default.blue}}
   '';
 
@@ -397,28 +397,28 @@ in
     @define-color accent_color {{colors.primary.default.hex}};
     @define-color accent_bg_color {{colors.primary.default.hex}};
     @define-color accent_fg_color {{colors.on_primary.default.hex}};
-    @define-color window_bg_color {{colors.surface.default.hex}};
+    @define-color window_bg_color {{base16.base01.default.hex}};
     @define-color window_fg_color {{colors.on_surface.default.hex}};
-    @define-color view_bg_color {{colors.surface.default.hex}};
+    @define-color view_bg_color {{base16.base01.default.hex}};
     @define-color view_fg_color {{colors.on_surface.default.hex}};
-    @define-color headerbar_bg_color {{colors.surface_container.default.hex}};
+    @define-color headerbar_bg_color {{base16.base02.default.hex}};
     @define-color headerbar_fg_color {{colors.on_surface.default.hex}};
-    @define-color card_bg_color {{colors.surface_container_low.default.hex}};
+    @define-color card_bg_color {{base16.base02.default.hex}};
     @define-color card_fg_color {{colors.on_surface.default.hex}};
-    @define-color dialog_bg_color {{colors.surface_container_high.default.hex}};
+    @define-color dialog_bg_color {{base16.base03.default.hex}};
     @define-color dialog_fg_color {{colors.on_surface.default.hex}};
-    @define-color popover_bg_color {{colors.surface_container.default.hex}};
+    @define-color popover_bg_color {{base16.base02.default.hex}};
     @define-color popover_fg_color {{colors.on_surface.default.hex}};
-    @define-color sidebar_bg_color {{colors.surface_container_low.default.hex}};
+    @define-color sidebar_bg_color {{base16.base01.default.hex}};
     @define-color sidebar_fg_color {{colors.on_surface.default.hex}};
     @define-color destructive_color {{colors.error.default.hex}};
     @define-color success_color {{base16.base0b.default.hex}};
     @define-color warning_color {{base16.base0a.default.hex}};
     @define-color error_color {{colors.error.default.hex}};
     /* GTK3 legacy imena */
-    @define-color theme_bg_color {{colors.surface.default.hex}};
+    @define-color theme_bg_color {{base16.base01.default.hex}};
     @define-color theme_fg_color {{colors.on_surface.default.hex}};
-    @define-color theme_base_color {{colors.surface.default.hex}};
+    @define-color theme_base_color {{base16.base01.default.hex}};
     @define-color theme_text_color {{colors.on_surface.default.hex}};
     @define-color theme_selected_bg_color {{colors.primary.default.hex}};
     @define-color theme_selected_fg_color {{colors.on_primary.default.hex}};
@@ -427,7 +427,7 @@ in
   # btop tema šablon — Material role-ovi za chrome, base16 akcenti za gradijente.
   xdg.configFile."matugen/templates/btop.theme".text = ''
     # matugen btop tema — ne edituj ručno
-    theme[main_bg]="{{colors.surface.default.hex}}"
+    theme[main_bg]="{{base16.base01.default.hex}}"
     theme[main_fg]="{{colors.on_surface.default.hex}}"
     theme[title]="{{colors.on_surface.default.hex}}"
     theme[hi_fg]="{{colors.primary.default.hex}}"
@@ -435,7 +435,7 @@ in
     theme[selected_fg]="{{colors.on_primary.default.hex}}"
     theme[inactive_fg]="{{colors.on_surface_variant.default.hex}}"
     theme[graph_text]="{{colors.on_surface_variant.default.hex}}"
-    theme[meter_bg]="{{colors.surface_container.default.hex}}"
+    theme[meter_bg]="{{base16.base02.default.hex}}"
     theme[proc_misc]="{{colors.tertiary.default.hex}}"
     theme[cpu_box]="{{colors.outline.default.hex}}"
     theme[mem_box]="{{colors.outline.default.hex}}"
